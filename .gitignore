@@ -3,3 +3,6 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+/.vs/MctsArtificialIntelligenceMethods/v15/.suo
+/.vs/MctsArtificialIntelligenceMethods/v15/Server/sqlite3/db.lock
+/.vs/MctsArtificialIntelligenceMethods/v15/Server/sqlite3

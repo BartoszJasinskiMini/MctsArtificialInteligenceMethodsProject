@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1145
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MctsArtificialIntelligenceMethods", "MctsArtificialIntelligenceMethods\MctsArtificialIntelligenceMethods.csproj", "{ED566220-9C8F-459D-9427-95882B4A13BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Havannah", "Havannah\Havannah.csproj", "{8D9C4763-AFE2-481D-BD7B-7C54A090B1AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +17,15 @@ Global
 		{ED566220-9C8F-459D-9427-95882B4A13BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED566220-9C8F-459D-9427-95882B4A13BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED566220-9C8F-459D-9427-95882B4A13BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D9C4763-AFE2-481D-BD7B-7C54A090B1AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D9C4763-AFE2-481D-BD7B-7C54A090B1AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D9C4763-AFE2-481D-BD7B-7C54A090B1AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D9C4763-AFE2-481D-BD7B-7C54A090B1AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {393D5C6D-0093-4178-8D67-3EBA4733555B}
 	EndGlobalSection
 EndGlobal
