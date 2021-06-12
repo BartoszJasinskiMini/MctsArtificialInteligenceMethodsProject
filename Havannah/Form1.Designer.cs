@@ -1,18 +1,8 @@
-﻿using System;
-
-using static System.Math;
-using static System.Drawing.Color;
-using System.Windows.Forms;
-
-namespace Havannah
+﻿namespace Havannah
 {
     partial class Form1
     {
-        public void ClickOnSpecificButton(int i, int j)
-        {
-            var hexagonButton = this.Controls[GenerateHexagonButtonName(i, j)];
-            ((HexagonButton)hexagonButton).PerformClick();
-        }
+
 
         /// <summary>
         /// Required designer variable.
@@ -40,70 +30,47 @@ namespace Havannah
         /// </summary>
         private void InitializeComponent()
         {
+            this.restartGame = new System.Windows.Forms.Button();
+            this.infoBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
+            // 
+            // restartGame
+            // 
+            this.restartGame.Location = new System.Drawing.Point(13, 13);
+            this.restartGame.Name = "restartGame";
+            this.restartGame.Size = new System.Drawing.Size(75, 34);
+            this.restartGame.TabIndex = 0;
+            this.restartGame.Text = "Restart Game";
+            this.restartGame.UseVisualStyleBackColor = true;
+            this.restartGame.Click += new System.EventHandler(this.restartGame_Click);
+            // 
+            // infoBox
+            // 
+            this.infoBox.Location = new System.Drawing.Point(13, 53);
+            this.infoBox.Name = "infoBox";
+            this.infoBox.Size = new System.Drawing.Size(178, 41);
+            this.infoBox.TabIndex = 1;
+            this.infoBox.Text = "";
+            this.infoBox.TextChanged += new System.EventHandler(this.infoBox_TextChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 962);
+            this.Controls.Add(this.infoBox);
+            this.Controls.Add(this.restartGame);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
 
         }
 
+
         #endregion
 
-        private void CreateHavannahBoardDelegate(object sender, EventArgs e)
-        {
-            int boardSize = 8, buttonSize = 56, buttonsLocationXCoordinate = ClientSize.Width / 2 - boardSize / 2 * buttonSize, 
-                buttonsLocationYCoordinate = ClientSize.Height / 2 + boardSize / 2 * buttonSize;
-            
-
-            for (int i = 0, k = 2 * boardSize - 2; i < 2 * boardSize - 1; i++, k--)
-            {
-                int z = i;
-                if (i > boardSize - 1)
-                {
-                    z = k;
-                }
-                for (int j = 0; j < boardSize + z; j++)
-                {
-                    var hexagonButton = new HexagonButton();
-                    hexagonButton.ForeColor = White;
-                    hexagonButton.BackColor = Black;
-                    hexagonButton.FlatStyle = FlatStyle.Flat;
-                    hexagonButton.FlatAppearance.BorderColor = Black;
-                    hexagonButton.FlatAppearance.BorderSize = 5;
-                    hexagonButton.Text = GenerateHexagonButtonName(i, j);
-                    hexagonButton.Name = GenerateHexagonButtonName(i, j);
-                    hexagonButton.Size = new System.Drawing.Size(buttonSize, buttonSize);
-                    hexagonButton.Click += new EventHandler(hexagonButtons_Click);
-
-                    hexagonButton.Location = new System.Drawing.Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * i * buttonSize / 2),
-                        buttonsLocationYCoordinate - (int)(Sqrt(3) / 2 * buttonSize * j) + (int)(Sqrt(3) / 4 * buttonSize * z));
-
-                    this.Controls.Add(hexagonButton);
-                }
-            }
-
-            ClickOnSpecificButton(1, 3);
-
-            ClickOnSpecificButton(3, 3);
-        }
-
-
-
-        private void hexagonButtons_Click(object sender, EventArgs e)
-        {
-            var hexagonButton = (HexagonButton)sender;
-            Console.WriteLine(hexagonButton.Name);
-        }
-
-
-        private string GenerateHexagonButtonName(int i, int j) => i + ", " + j;
-
+        private System.Windows.Forms.Button restartGame;
+        private System.Windows.Forms.RichTextBox infoBox;
     }
 }
 
