@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -32,5 +28,8 @@ namespace Havannah
             Region = new Region(myPath);
             base.OnPaint(pevent);
         }
+
+        public static string GenerateHexagonButtonName(int i, int j) => i + ", " + j;
+
     }
 }

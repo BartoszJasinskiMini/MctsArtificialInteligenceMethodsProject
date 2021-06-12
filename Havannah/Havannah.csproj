@@ -52,6 +52,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameState\GameState.cs" />
+    <Compile Include="GameState\GameStateElement.cs" />
     <Compile Include="HexagonButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -82,5 +84,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

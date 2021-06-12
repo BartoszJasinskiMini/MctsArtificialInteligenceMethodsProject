@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
 
 using static System.Math;
 using static System.Drawing.Color;
+using static Havannah.HexagonButton;
+using static Havannah.GameState.Player;
 
 
 namespace Havannah
 {
     public partial class Form1 : Form
     {
-        private static int boardSize = 8, buttonSize = 56, buttonsLocationXCoordinate, buttonsLocationYCoordinate;
-        private bool[,] gameState = new bool[2 * boardSize - 1, 2 * boardSize - 1];
+
+        private static int boardSize = 4, buttonSize = 56, buttonsLocationXCoordinate, buttonsLocationYCoordinate;
+        private GameState.GameState gameState = new GameState.GameState(boardSize);
+        private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
+        private bool didFirstPlayerClickedHexagonButton = true;
 
         public Form1()
         {
@@ -27,18 +25,18 @@ namespace Havannah
             buttonsLocationXCoordinate = ClientSize.Width / 2 - boardSize / 2 * buttonSize;
             buttonsLocationYCoordinate = ClientSize.Height / 2 + boardSize / 2 * buttonSize - 80;
 
-
-
-            //CreateStateHoldingStructure();
             Shown += CreateHavannahBoardDelegate;
         }
 
-        // THIS FUNCTION IS FOR PLAYING HAVANNAH ON GUI
-        public void ClickOnSpecificButton(int i, int j)
+        // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
+        public void ClickOnSpecificButton(int i, int j, GameState.Player player)
         {
             EvaluateClickCoordinates(i, j);
-            var hexagonButton = Controls[GenerateHexagonButtonName(i, j)];
-            ((HexagonButton)hexagonButton).PerformClick();
+
+            didFirstPlayerClickedHexagonButton = player == First;
+            var hexagonButton = (HexagonButton)Controls[GenerateHexagonButtonName(i, j)];
+            hexagonButton.PerformClick();
+
             ClickOnSpecificField(i, j);
         }
 
@@ -47,6 +45,10 @@ namespace Havannah
         {
             EvaluateClickCoordinates(i, j);
 
+            gameState.State[i, j].IsClicked = true;
+            gameState.State[i, j].Player = didFirstPlayerClickedHexagonButton ? First : Second;
+
+            gameState.CheckIfOneOfThePlayersWonGame();
         }
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
@@ -64,11 +66,12 @@ namespace Havannah
                     var hexagonButton = new HexagonButton
                     {
                         ForeColor = White,
-                        BackColor = Black,
+                        BackColor = hexagonButtonsDefaultColor,
                         FlatStyle = FlatStyle.Flat
                     };
-                    hexagonButton.FlatAppearance.BorderColor = Black;
-                    hexagonButton.FlatAppearance.BorderSize = 5;
+                    hexagonButton.FlatAppearance.BorderSize = 0;
+
+
                     hexagonButton.Text = GenerateHexagonButtonName(i, j);
                     hexagonButton.Name = GenerateHexagonButtonName(i, j);
                     hexagonButton.Size = new Size(buttonSize, buttonSize);
@@ -79,27 +82,9 @@ namespace Havannah
 
                     Controls.Add(hexagonButton);
                 }
-            }          
+            }
 
         }
-
-        private void restartGame_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void infoBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void HexagonButtons_Click(object sender, EventArgs e)
-        {
-            var hexagonButton = (HexagonButton)sender;
-            infoBox.Text = hexagonButton.Name;
-        }
-
-        private string GenerateHexagonButtonName(int i, int j) => i + ", " + j;
-
 
         private bool EvaluateClickCoordinates(int i, int j)
         {
@@ -116,17 +101,45 @@ namespace Havannah
             return true;
         }
 
-        private void PrintArray()
+
+        private void restartGame_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < gameState.GetLength(0); i++)
-            {
-                for (int j = 0; j < gameState.GetLength(0); j++)
-                {
-                    Console.Write(i + " : " + j + " " + gameState[i, j] + "   ");
-                }
-                Console.Write(Environment.NewLine + Environment.NewLine);
-            }
+            gameState.ResetGameState();
+            ResetGuiState();
         }
+
+        private void ResetGuiState()
+        {
+            foreach(var control in Controls)
+            {
+                if (control is HexagonButton)
+                {
+                    (control as HexagonButton).BackColor = hexagonButtonsDefaultColor;
+                }
+            }
+
+            infoBox.ResetText();
+
+        }
+
+        private void infoBox_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void HexagonButtons_Click(object sender, EventArgs e)
+        {
+            var hexagonButton = (HexagonButton)sender;
+            if(didFirstPlayerClickedHexagonButton)
+            hexagonButton.BackColor = didFirstPlayerClickedHexagonButton ? firstPlayerColor : secondPlayerColor;
+
+            infoBox.Text = hexagonButton.Name;
+
+            didFirstPlayerClickedHexagonButton = true;
+        }
+
+
+
+
 
 
     }
