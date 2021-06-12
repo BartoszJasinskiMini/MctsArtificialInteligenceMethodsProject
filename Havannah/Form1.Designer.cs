@@ -1,6 +1,8 @@
 ﻿using System;
 
+using static System.Math;
 using static System.Drawing.Color;
+using System.Windows.Forms;
 
 namespace Havannah
 {
@@ -49,32 +51,46 @@ namespace Havannah
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
         {
-            var boardSize = 8;
-            var buttonSize = 32;
-            CreateFirstHalfOfHavannahBoard(boardSize, buttonSize);
+            int boardSize = 4, buttonSize = 46, buttonsLocationXCoordinate = ClientSize.Width / 2 - boardSize / 2 * buttonSize, buttonsLocationYCoordinate = ClientSize.Height / 2 + boardSize / 2 * buttonSize;
+            
 
-
-        }
-
-        private void CreateFirstHalfOfHavannahBoard(int boardSize, int buttonSize)
-        {
-            for (int i = 0; i < boardSize * 2 - 1; i++)
+            for (int i = 0, k = 2 * boardSize - 2; i < 2 * boardSize - 1; i++, k--)
             {
-                for (int j = 0; j < boardSize + i; j++)
+                int z = i;
+                if (i > boardSize - 1)
+                {
+                    z = k;
+                }
+                for (int j = 0; j < boardSize + z; j++)
                 {
                     var hexagonButton = new HexagonButton();
-                    hexagonButton.BackColor = Red;
-                    hexagonButton.Text = "Button" + i;
-                    hexagonButton.Location = new System.Drawing.Point(400 + (int)(Math.Sqrt(3) * i * buttonSize / 2), 400 - (int)(Math.Sqrt(3)/2 * buttonSize * (j)) + (int)(Math.Sqrt(3) / 4 * buttonSize * i)    );
+                    hexagonButton.ForeColor = White;
+                    hexagonButton.BackColor = Black;
+                    hexagonButton.FlatStyle = FlatStyle.Flat;
+                    hexagonButton.FlatAppearance.BorderColor = Black;
+                    hexagonButton.FlatAppearance.BorderSize = 5;
+                    // hexagonButton.Font = new System.Drawing.Font()
+                    hexagonButton.Text = i + ", " + j;
                     hexagonButton.Size = new System.Drawing.Size(buttonSize, buttonSize);
-                    hexagonButton.AccessibleName = "HERE IS BUTTON" + i + " " + j;
+                    hexagonButton.AccessibleName = "HERE IS BUTTON " + i + " " + j;
                     hexagonButton.Click += new EventHandler(hexagonButtons_Click);
+
+
+                    hexagonButton.Location = new System.Drawing.Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * i * buttonSize / 2),
+                        buttonsLocationYCoordinate - (int)(Sqrt(3) / 2 * buttonSize * j) + (int)(Sqrt(3) / 4 * buttonSize * z));
 
                     this.Controls.Add(hexagonButton);
                 }
 
 
             }
+
+
+        }
+
+        private void CreateFirstHalfOfHavannahBoard(int boardSize, int buttonSize)
+        {
+
         }
 
 
@@ -84,11 +100,6 @@ namespace Havannah
             Console.WriteLine(hexagonButton.AccessibleName);
         }
 
-
-        private double Ceiling(int number)
-        {
-            return Math.Ceiling((double)number);
-        }
     }
 }
 
