@@ -1,4 +1,8 @@
-﻿namespace Havannah
+﻿using System;
+
+using static System.Drawing.Color;
+
+namespace Havannah
 {
     partial class Form1
     {
@@ -28,24 +32,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.hexagonButton1 = new Havannah.HexagonButton();
             this.SuspendLayout();
-            // 
-            // hexagonButton1
-            // 
-            this.hexagonButton1.Location = new System.Drawing.Point(294, 396);
-            this.hexagonButton1.Name = "hexagonButton1";
-            this.hexagonButton1.Size = new System.Drawing.Size(494, 202);
-            this.hexagonButton1.TabIndex = 0;
-            this.hexagonButton1.Text = "hexagonButton1";
-            this.hexagonButton1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1363, 838);
-            this.Controls.Add(this.hexagonButton1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -54,7 +47,48 @@
 
         #endregion
 
-        private HexagonButton hexagonButton1;
+        private void CreateHavannahBoardDelegate(object sender, EventArgs e)
+        {
+            var boardSize = 8;
+            var buttonSize = 32;
+            CreateFirstHalfOfHavannahBoard(boardSize, buttonSize);
+
+
+        }
+
+        private void CreateFirstHalfOfHavannahBoard(int boardSize, int buttonSize)
+        {
+            for (int i = 0; i < boardSize * 2 - 1; i++)
+            {
+                for (int j = 0; j < boardSize + i; j++)
+                {
+                    var hexagonButton = new HexagonButton();
+                    hexagonButton.BackColor = Red;
+                    hexagonButton.Text = "Button" + i;
+                    hexagonButton.Location = new System.Drawing.Point(400 + (int)(Math.Sqrt(3) * i * buttonSize / 2), 400 - (int)(Math.Sqrt(3)/2 * buttonSize * (j)) + (int)(Math.Sqrt(3) / 4 * buttonSize * i)    );
+                    hexagonButton.Size = new System.Drawing.Size(buttonSize, buttonSize);
+                    hexagonButton.AccessibleName = "HERE IS BUTTON" + i + " " + j;
+                    hexagonButton.Click += new EventHandler(hexagonButtons_Click);
+
+                    this.Controls.Add(hexagonButton);
+                }
+
+
+            }
+        }
+
+
+        private void hexagonButtons_Click(object sender, EventArgs e)
+        {
+            var hexagonButton = (HexagonButton)sender;
+            Console.WriteLine(hexagonButton.AccessibleName);
+        }
+
+
+        private double Ceiling(int number)
+        {
+            return Math.Ceiling((double)number);
+        }
     }
 }
 

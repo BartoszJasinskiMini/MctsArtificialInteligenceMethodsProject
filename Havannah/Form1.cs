@@ -15,6 +15,7 @@ namespace Havannah
         public Form1()
         {
             InitializeComponent();
+            this.Shown += CreateHavannahBoardDelegate;
         }
     }
 }
