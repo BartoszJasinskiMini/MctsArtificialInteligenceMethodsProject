@@ -8,5 +8,21 @@ namespace MctsArtificialIntelligenceMethods
 {
     class MonteCarloTreeSearch
     {
+        private void Selection()
+        {
+
+        }
+        private void Expansion()
+        {
+
+        }
+        private void Simulation()
+        {
+
+        }
+        private void Backpropagation()
+        {
+
+        }
     }
 }
