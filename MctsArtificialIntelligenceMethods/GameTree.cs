@@ -8,5 +8,11 @@ namespace MctsArtificialIntelligenceMethods
 {
     class GameTree
     {
+        public Node Root { get; private set; }
+
+        public GameTree(Board board)
+        {
+            Root = new Node(null, board);
+        }
     }
 }

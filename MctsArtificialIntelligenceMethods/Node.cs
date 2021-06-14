@@ -20,6 +20,12 @@ namespace MctsArtificialIntelligenceMethods
         public bool isChild { get; set; }
         public List<Node> Children { get; private set; }
         public Node Parent { get; private set; }
+        private Board _board;
 
+        public Node(Node parent, Board board)
+        {
+            Parent = parent;
+            _board = board;
+        }
     }
 }

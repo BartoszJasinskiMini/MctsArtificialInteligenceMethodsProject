@@ -8,6 +8,7 @@ namespace MctsArtificialIntelligenceMethods
 {
     class MonteCarloTreeSearch
     {
+        private GameTree _gameTree;
         private void Selection()
         {
 
