@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MctsArtificialIntelligenceMethods
+namespace Havannah
 {
+    enum Result {  Win, Loss, Draw, Timeout }
     class MonteCarloTreeSearch
     {
         private const int _player1 = 1;
         private const int _player2 = 2;
+        private const double _minTimeLeft = 1000;
         private GameTree _gameTree;
         private List<Node> _path;
         private Node Selection()
         {
             Node currentNode = _gameTree.Root;
             _path.Add(currentNode);
-            while(currentNode.isLeaf)
+            while (currentNode.isLeaf)
             {
                 currentNode = currentNode.GetNextNode();
                 _path.Add(currentNode);
@@ -38,16 +41,41 @@ namespace MctsArtificialIntelligenceMethods
                 }
             }
             _path.Add(result);
-            return result;        
+            return result;
         }
-        private void Simulation(Node node, int timeLeft)
+        private Result Simulation(Node node, double timeLeft)
         {
-            
+            Stopwatch stopwatch = new Stopwatch();
+            Board board = node.Board.Clone();
+            int player = node.WhichPlayerMoves == _player1 ? _player2 : _player1;
+            while (timeLeft > _minTimeLeft)
+            {
+                stopwatch.Start();
+                board.MakeRandomMove(player);
+                if (board.CheckIfDraw())
+                {
+                    return Result.Draw;
+                }
+                if (board.CheckIfWin(_player1))
+                {
+                    return Result.Win;
+                }
+                if (board.CheckIfWin(_player2))
+                {
+                    return Result.Loss;
+                }
+                stopwatch.Stop();
+                timeLeft -= stopwatch.Elapsed.TotalMilliseconds;
+            }
+            return Result.Timeout;
 
         }
-        private void Backpropagation()
+        private void Backpropagation(Result result)
         {
-
+            foreach(var node in _path)
+            {
+                node.AddGame(result == Result.Win);
+            }
         }
     }
 }

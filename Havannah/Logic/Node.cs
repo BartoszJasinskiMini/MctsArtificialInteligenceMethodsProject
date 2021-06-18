@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MctsArtificialIntelligenceMethods
+namespace Havannah
 {
     class Node
     {
@@ -23,6 +23,11 @@ namespace MctsArtificialIntelligenceMethods
         public Board Board { get; private set; }
         public int WhichPlayerMoves { get; private set; }
 
+        public void AddGame(bool ifWon)
+        {
+            AllGames++;
+            Wins += ifWon ? 1 : 0;
+        }
         public Node(Node parent, Board board, int player)
         {
             Wins = 0;
@@ -33,6 +38,7 @@ namespace MctsArtificialIntelligenceMethods
             WhichPlayerMoves = player;
         }
 
+        //UDT trzeba zaimplementować
         public Node GetNextNode()
         {
             return null;
