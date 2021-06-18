@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MctsArtificialIntelligenceMethods
+namespace Havannah.Logic
 {
     class GameTree
     {

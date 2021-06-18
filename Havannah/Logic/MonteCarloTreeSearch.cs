@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Havannah
+namespace Havannah.Logic
 {
     enum Result {  Win, Loss, Draw, Timeout }
     class MonteCarloTreeSearch

@@ -1,7 +1,8 @@
 ﻿using System;
 
-using static Havannah.GameState.Player;
+using Havannah.Logic;
 
+using static Havannah.GameState.Player;
 
 namespace Havannah.GameState
 {
@@ -9,7 +10,7 @@ namespace Havannah.GameState
     {
 
         public GameStateElement[,] State { get; set; }
-
+        public Board Board { get; set; }
 
         public GameState(int boardSize)
         {
