@@ -29,7 +29,14 @@ namespace Havannah
             base.OnPaint(pevent);
         }
 
-        public static string GenerateHexagonButtonName(int i, int j) => i + ", " + j;
+        public static string GenerateHexagonButtonName(int x, int y) => x + ", " + y;
+
+        public Tuple<int, int> GetButtonCoordinates()
+        {
+            var coordinates = Name.Split(',');
+
+            return new Tuple<int, int>(int.Parse(coordinates[0]), int.Parse(coordinates[1]));
+        }
 
     }
 }

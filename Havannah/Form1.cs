@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using static System.Math;
 using static System.Drawing.Color;
 using static Havannah.HexagonButton;
-using static Havannah.GameState.Player;
 
 
 namespace Havannah
@@ -17,6 +16,7 @@ namespace Havannah
         private GameState.GameState gameState = new GameState.GameState(boardSize);
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
         private bool didFirstPlayerClickedHexagonButton = true;
+        private int whichPlayerClicked = 0;
 
         public Form1()
         {
@@ -29,27 +29,25 @@ namespace Havannah
         }
 
         // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
-        public void ClickOnSpecificButton(int i, int j, GameState.Player player)
+        public void ClickOnSpecificButton(int player, int x, int y)
         {
-            EvaluateClickCoordinates(i, j);
-
-            didFirstPlayerClickedHexagonButton = player == First;
-            var hexagonButton = (HexagonButton)Controls[GenerateHexagonButtonName(i, j)];
+            whichPlayerClicked = player;
+            didFirstPlayerClickedHexagonButton = player == 1;
+            var hexagonButton = (HexagonButton)Controls[GenerateHexagonButtonName(x, y)];
             hexagonButton.PerformClick();
-
-            ClickOnSpecificField(i, j);
+            
         }
 
         // THIS FUNCTION IS FOR PLAYING HAVANNAH WITHOUT GUI
-        public void ClickOnSpecificField(int i, int j)
-        {
-            EvaluateClickCoordinates(i, j);
+        //     public void ClickOnSpecificField(int player, int x, int y)
+        //       {
+//        gameState.MakeMove(player, x, y);
 
-            gameState.State[i, j].IsClicked = true;
-            gameState.State[i, j].Player = didFirstPlayerClickedHexagonButton ? First : Second;
+        //  gameState.State[i, j].IsClicked = true;
+        //  gameState.State[i, j].Player = didFirstPlayerClickedHexagonButton ? First : Second;
 
-            gameState.CheckIfOneOfThePlayersWonGame();
-        }
+        //  gameState.CheckIfOneOfThePlayersWonGame();
+        //       }
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
         {
@@ -86,20 +84,7 @@ namespace Havannah
 
         }
 
-        private bool EvaluateClickCoordinates(int i, int j)
-        {
-            if (i < 0 || j < 0 || i >= 2 * boardSize - 1)
-            {
-                throw new Exception("CLICK: " + GenerateHexagonButtonName(i, j) + " OUTSIDE BOARD BOUNDARIES");
-            }
 
-            if (j >= i + boardSize)
-            {
-                throw new Exception("CLICK: " + GenerateHexagonButtonName(i, j) + " OUTSIDE BOARD BOUNDARIES");
-            }
-
-            return true;
-        }
 
 
         private void restartGame_Click(object sender, EventArgs e)
@@ -129,12 +114,14 @@ namespace Havannah
         private void HexagonButtons_Click(object sender, EventArgs e)
         {
             var hexagonButton = (HexagonButton)sender;
-            if(didFirstPlayerClickedHexagonButton)
-            hexagonButton.BackColor = didFirstPlayerClickedHexagonButton ? firstPlayerColor : secondPlayerColor;
-
+            //if(didFirstPlayerClickedHexagonButton)
+            //hexagonButton.BackColor = didFirstPlayerClickedHexagonButton ? firstPlayerColor : secondPlayerColor;
+            hexagonButton.BackColor = whichPlayerClicked == 0 || whichPlayerClicked == 1 ? firstPlayerColor : secondPlayerColor;
             infoBox.Text = hexagonButton.Name;
-
-            didFirstPlayerClickedHexagonButton = true;
+            var buttonCoordinates = hexagonButton.GetButtonCoordinates();
+            gameState.MakeMove(whichPlayerClicked == 0 || whichPlayerClicked == 1 ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
+            gameState.PrintBoard();
+           // didFirstPlayerClickedHexagonButton = true;
         }
 
 

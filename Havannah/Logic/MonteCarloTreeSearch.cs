@@ -29,7 +29,7 @@ namespace Havannah.Logic
         private Node Expansion(Node leafNode)
         {
             Node result = leafNode;
-            if (!leafNode.Board.CheckIfWin(_player1) && !leafNode.Board.CheckIfWin(_player2) && !leafNode.Board.CheckIfDraw())
+            if (!leafNode.Board.CheckIfWon(_player1) && !leafNode.Board.CheckIfWon(_player2) && !leafNode.Board.CheckIfDraw())
             {
                 Board childBoard = leafNode.Board.Clone();
                 if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1))
@@ -56,11 +56,11 @@ namespace Havannah.Logic
                 {
                     return Result.Draw;
                 }
-                if (board.CheckIfWin(_player1))
+                if (board.CheckIfWon(_player1))
                 {
                     return Result.Win;
                 }
-                if (board.CheckIfWin(_player2))
+                if (board.CheckIfWon(_player2))
                 {
                     return Result.Loss;
                 }
