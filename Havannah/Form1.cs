@@ -55,7 +55,7 @@ namespace Havannah
         {
             timer1 = new Timer();
             timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = 10000; // in miliseconds
+            timer1.Interval = moveTime + 1000; // in miliseconds
             timer1.Start();
         }
 
