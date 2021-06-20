@@ -9,7 +9,7 @@ using static Havannah.HexagonButton;
 
 namespace Havannah.Logic
 {
-    class Board
+    public class Board
     {
         public class Point
         {
