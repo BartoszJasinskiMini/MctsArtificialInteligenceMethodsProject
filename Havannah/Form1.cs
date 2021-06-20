@@ -69,10 +69,17 @@ namespace Havannah
                     z = k;
                 }
                 int l = i;
+                int m = 4;
                 if (i > boardSize - 1)
                 {
                     l -= (i - boardSize + 1);
+                    
                 }
+                if (i > boardSize - 1)
+                {
+                    m = 2;
+                }
+
                 for (int j = 0; j < boardSize + z; j++)
                 {
                     var hexagonButton = new HexagonButton
@@ -90,7 +97,7 @@ namespace Havannah
                     hexagonButton.Click += new EventHandler(HexagonButtons_Click);
 
                     hexagonButton.Location = new Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * (boardSize - l + j) * buttonSize / 2.25),
-                    buttonsLocationYCoordinate - (int)(Sqrt(3) / 4 * buttonSize * j) + (int)(Sqrt(3) / 2 * buttonSize * (boardSize - i)));
+                    buttonsLocationYCoordinate - (int)(Sqrt(3) / 4 * buttonSize * j) + (int)(Sqrt(3) / m * buttonSize * (boardSize - i)));
 
                     Controls.Add(hexagonButton);
                 }
