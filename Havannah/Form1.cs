@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 using static System.Math;
 using static System.Drawing.Color;
@@ -15,7 +16,6 @@ namespace Havannah
         private static int boardSize = 3, buttonSize = 56, buttonsLocationXCoordinate, buttonsLocationYCoordinate;
         private GameState.GameState gameState = new GameState.GameState(boardSize);
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
-        private bool didFirstPlayerClickedHexagonButton = true;
         private int whichPlayerClicked = 0;
         private int moveTime = 1000;
         MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
@@ -32,7 +32,7 @@ namespace Havannah
             buttonsLocationYCoordinate = ClientSize.Height / 2 + boardSize / 2 * buttonSize - 80;
 
             Shown += CreateHavannahBoardDelegate;
-            InitTimer();
+          //  InitTimer();
         }
 
         // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
@@ -45,7 +45,6 @@ namespace Havannah
         public void ClickOnSpecificButton(int player, int x, int y)
         {
             whichPlayerClicked = player;
-            didFirstPlayerClickedHexagonButton = player == 1;
             var hexagonButton = (HexagonButton)Controls[GenerateHexagonButtonName(x, y)];
             hexagonButton.PerformClick();
             
@@ -55,7 +54,7 @@ namespace Havannah
         {
             timer1 = new Timer();
             timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = moveTime + 1000; // in miliseconds
+            timer1.Interval = moveTime + 100; // in miliseconds
             timer1.Start();
         }
 
@@ -78,7 +77,30 @@ namespace Havannah
 
         private void InvokeAlgorithm()
         {
-            ClickOnSpecificButton(1, monteCarloTreeSearch.RunAlgorithm(gameState.Board, moveTime));
+
+
+            Task<Board.Point> task = Task<Board.Point>.Factory.StartNew(() =>
+            {
+                //infoBox.Text = "WAIT FOR YOUR TURN";
+
+                var point = monteCarloTreeSearch.RunAlgorithm(gameState.Board, moveTime);
+                ClickOnSpecificButton(1, point);
+                //if (whichPlayerClicked == 1 || whichPlayerClicked == 0)
+                //{
+                //    whichPlayerClicked = 2;
+                //}
+                //else if (whichPlayerClicked == 2)
+                //{
+                //    whichPlayerClicked = 1;
+                //}
+
+             //   infoBox.Text = "MAKE MOVE";
+
+                return point;
+            });
+
+
+
         }
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
@@ -130,6 +152,7 @@ namespace Havannah
                 }
             }
         }
+
 
         //ITS NOT USED BUT DONT DELETE IT
         private void func()
@@ -214,8 +237,15 @@ namespace Havannah
             infoBox.Text = hexagonButton.Name;
 
             var buttonCoordinates = hexagonButton.GetButtonCoordinates(boardSize);
-            gameState.MakeMove(whichPlayerClicked == 0 || whichPlayerClicked == 1 ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
+            gameState.MakeMove((whichPlayerClicked == 0 || whichPlayerClicked == 1) ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
             gameState.PrintBoard();
+
+            if(gameState.CheckIfWon() != 0)
+            {
+                infoBox.Text = "SOMEONE WON GAME!!!";
+            }
+
+            whichPlayerClicked = 0;
         }
 
 
