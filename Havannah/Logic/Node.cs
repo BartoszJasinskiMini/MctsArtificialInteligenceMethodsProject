@@ -53,7 +53,7 @@ namespace Havannah.Logic
             {
                 double value = Children[i].WinRatio;
                 scores[i] = value;
-                if(value > maxValue)
+                if(value >= maxValue)
                 {
                     maxValue = value;
                     index = i;

@@ -9,7 +9,7 @@ using static Havannah.Logic.Board;
 namespace Havannah.Logic
 {
     enum Result {  Win, Loss, Draw, Timeout }
-    class MonteCarloTreeSearch
+    public class MonteCarloTreeSearch
     {
         private const double alpha = 0.95;
         private const int _player1 = 1;
@@ -37,7 +37,7 @@ namespace Havannah.Logic
         {
             Node currentNode = _gameTree.Root;
             _path.Add(currentNode);
-            while (currentNode.isLeaf)
+            while (!currentNode.isLeaf)
             {
                 currentNode = currentNode.GetNextNode();
                 _path.Add(currentNode);

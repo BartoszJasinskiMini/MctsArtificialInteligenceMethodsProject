@@ -48,6 +48,7 @@ namespace Havannah.Logic
         {
             _size = size;
             _grid = new int[2 * size - 1, 2 * size - 1];
+            _freeCells = new List<Point>();
 
             for (int i = 0; i < _grid.GetLength(0); i++)
             {
@@ -56,21 +57,12 @@ namespace Havannah.Logic
                     if(CheckIfClickIsCorrect(i, j))
                     {
                         _grid[i, j] = 0;
+                        _freeCells.Add(new Point(i, j));
                     }
                     else
                     {
                         _grid[i, j] = -1;
                     }
-                }
-            }
-
-            _freeCells = new List<Point>();
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size + 1; j++)
-                {
-                    _freeCells.Add(new Point(i, j));
-                    _freeCells.Add(new Point((2 * size - 1) - i, (2 * size - 1) - j));
                 }
             }
         }
@@ -111,7 +103,7 @@ namespace Havannah.Logic
             int randomPosition = random.Next(0, _freeCells.Count);
             Point randomPoint = _freeCells[randomPosition];
             move = randomPoint.Clone();
-            MakeMove(randomPoint.X, randomPoint.Y, player);
+            MakeMove(player, randomPoint.X, randomPoint.Y);
             return true;
         }
 
