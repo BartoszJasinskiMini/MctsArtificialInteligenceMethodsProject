@@ -52,10 +52,6 @@ namespace Havannah
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
         {
             func2();
-
-
-
-
         }
 
 
@@ -69,15 +65,15 @@ namespace Havannah
                     z = k;
                 }
                 int l = i;
-                int m = 4;
+                double m = 4;
                 if (i > boardSize - 1)
                 {
                     l -= (i - boardSize + 1);
                     
                 }
-                if (i > boardSize - 1)
+                if (i > boardSize)
                 {
-                    m = 2;
+                    m = 1.5;
                 }
 
                 for (int j = 0; j < boardSize + z; j++)
@@ -104,8 +100,7 @@ namespace Havannah
             }
         }
 
-
-
+        //ITS NOT USED BUT DONT DELETE IT
         private void func()
         {
             for (int i = 0, k = 2 * boardSize - 2; i < 2 * boardSize - 1; i++, k--)
