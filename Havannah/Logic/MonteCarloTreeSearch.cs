@@ -23,6 +23,7 @@ namespace Havannah.Logic
             Stopwatch stopwatch = new Stopwatch();
             time = alpha * time;
             _gameTree = new GameTree(board, _player1);
+            _path = new List<Node>();
             while(time > 0)
             {
                 stopwatch.Start();

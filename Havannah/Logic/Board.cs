@@ -15,11 +15,28 @@ namespace Havannah.Logic
         {
             public int X { get; private set; }
             public int Y { get; private set; }
-
             public Point(int x, int y)
             {
                 X = x;
                 Y = y;
+            }
+            public override bool Equals(object obj)
+            {
+                return obj is Point point &&
+                       X == point.X &&
+                       Y == point.Y;
+            }
+            public Point Clone()
+            {
+                return new Point(X, Y);
+            }
+
+            public override int GetHashCode()
+            {
+                int hashCode = 1861411795;
+                hashCode = hashCode * -1521134295 + X.GetHashCode();
+                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                return hashCode;
             }
         }
 
@@ -86,15 +103,15 @@ namespace Havannah.Logic
             return new Board(_size, _grid, _freeCells);
         }
 
-        public bool MakeRandomMove(int player)
+        public bool MakeRandomMove(int player, out Point move)
         {
+            move = null;
             if (_freeCells.Count <= 0) return false;
             Random random = new Random();
             int randomPosition = random.Next(0, _freeCells.Count);
             Point randomPoint = _freeCells[randomPosition];
+            move = randomPoint.Clone();
             MakeMove(randomPoint.X, randomPoint.Y, player);
-            _freeCells.RemoveAt(randomPosition);
-
             return true;
         }
 
@@ -110,6 +127,7 @@ namespace Havannah.Logic
             if (_grid[x, y] == 0)
             {
                 _grid[x, y] = player;
+                _freeCells.Remove(new Point(x, y));
                 return true;
             }
 
