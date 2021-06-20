@@ -1,4 +1,5 @@
 ﻿using System;
+using Havannah.Logic;
 
 namespace MctsArtificialIntelligenceMethods
 {
@@ -6,11 +7,8 @@ namespace MctsArtificialIntelligenceMethods
     {
         public static void Main(string[] args)
         {
-            int size = 8;
-            Board board = new Board(size);
-            int[,] tab = new int[size * 2 - 1, size * 2 - 1];
-
-            int k = 0;
+            MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
+            monteCarloTreeSearch.RunAlgorithm(new Board(4), 10000);
         }
     }
 }
