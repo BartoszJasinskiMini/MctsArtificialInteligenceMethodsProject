@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using static System.Math;
 using static System.Drawing.Color;
 using static Havannah.HexagonButton;
-
+using Havannah.Logic;
 
 namespace Havannah
 {
@@ -17,7 +17,11 @@ namespace Havannah
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
         private bool didFirstPlayerClickedHexagonButton = true;
         private int whichPlayerClicked = 0;
-        private int moveTime = 10;
+        private int moveTime = 10000;
+        MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
+
+        private Timer timer1;
+
 
 
         public Form1()
@@ -28,6 +32,13 @@ namespace Havannah
             buttonsLocationYCoordinate = ClientSize.Height / 2 + boardSize / 2 * buttonSize - 80;
 
             Shown += CreateHavannahBoardDelegate;
+            InitTimer();
+        }
+
+        // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
+        public void ClickOnSpecificButton(int player, Board.Point point)
+        {
+            ClickOnSpecificButton(player, point.X, point.Y);
         }
 
         // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
@@ -40,10 +51,18 @@ namespace Havannah
             
         }
 
+        public void InitTimer()
+        {
+            timer1 = new Timer();
+            timer1.Tick += new EventHandler(timer1_Tick);
+            timer1.Interval = 10000; // in miliseconds
+            timer1.Start();
+        }
+
         // THIS FUNCTION IS FOR PLAYING HAVANNAH WITHOUT GUI
         //     public void ClickOnSpecificField(int player, int x, int y)
         //       {
-//        gameState.MakeMove(player, x, y);
+        //        gameState.MakeMove(player, x, y);
 
         //  gameState.State[i, j].IsClicked = true;
         //  gameState.State[i, j].Player = didFirstPlayerClickedHexagonButton ? First : Second;
@@ -51,9 +70,15 @@ namespace Havannah
         //  gameState.CheckIfOneOfThePlayersWonGame();
         //       }
 
-            private void InvokeAlgorithm()
-        {
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            InvokeAlgorithm();
+        }
+
+        private void InvokeAlgorithm()
+        {
+            ClickOnSpecificButton(1, monteCarloTreeSearch.RunAlgorithm(gameState.Board, moveTime));
         }
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
