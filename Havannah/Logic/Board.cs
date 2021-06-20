@@ -32,13 +32,20 @@ namespace Havannah.Logic
             _size = size;
             _grid = new int[2 * size - 1, 2 * size - 1];
 
-            //for (int i = 0; i < _grid.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < _grid.GetLength(1); j++)
-            //    {
-            //        _grid[i, j] = -1;
-            //    }
-            //}
+            for (int i = 0; i < _grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < _grid.GetLength(1); j++)
+                {
+                    if(CheckIfClickIsCorrect(i, j))
+                    {
+                        _grid[i, j] = 0;
+                    }
+                    else
+                    {
+                        _grid[i, j] = -1;
+                    }
+                }
+            }
 
             _freeCells = new List<Point>();
             for (int i = 0; i < size; i++)
@@ -144,19 +151,39 @@ namespace Havannah.Logic
             return false;
         }
 
-        private bool EvaluateClickCoordinates(int i, int j)
+        public bool CheckIfClickIsCorrect(int x, int y)
         {
-            if (i < 0 || j < 0 || i >= 2 * _size - 1)
+            if (x < 0 || y < 0 || x >= 2 * _size - 1)
             {
-                throw new Exception("CLICK: " + GenerateHexagonButtonName(i, j) + " OUTSIDE BOARD BOUNDARIES");
+                return false;
             }
 
-            if (j >= i + _size)
+            if (y >= x + _size)
             {
-                throw new Exception("CLICK: " + GenerateHexagonButtonName(i, j) + " OUTSIDE BOARD BOUNDARIES");
+                return false;
             }
 
-            return true;
+
+            if (y < x + _size && y > x - _size)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool EvaluateClickCoordinates(int x, int y)
+        {
+            if (CheckIfClickIsCorrect(x, y))
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("CLICK: " + GenerateHexagonButtonName(x, y) + " OUTSIDE BOARD BOUNDARIES");
+            }
         }
 
         private Board(int size, int[,] grid, List<Point> freeCells)
