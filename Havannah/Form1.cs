@@ -177,7 +177,7 @@ namespace Havannah
         private void HexagonButtons_Click(object sender, EventArgs e)
         {
             var hexagonButton = (HexagonButton)sender;
-            hexagonButton.Visible = false;
+            //hexagonButton.Visible = false;
             hexagonButton.BackColor = whichPlayerClicked == 0 || whichPlayerClicked == 1 ? firstPlayerColor : secondPlayerColor;
             infoBox.Text = hexagonButton.Name;
 
