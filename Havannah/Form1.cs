@@ -17,7 +17,7 @@ namespace Havannah
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
         private bool didFirstPlayerClickedHexagonButton = true;
         private int whichPlayerClicked = 0;
-        private int moveTime = 10000;
+        private int moveTime = 1000;
         MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
 
         private Timer timer1;
