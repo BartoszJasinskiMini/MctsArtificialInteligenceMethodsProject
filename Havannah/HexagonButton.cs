@@ -31,6 +31,67 @@ namespace Havannah
 
         public static string GenerateHexagonButtonName(int x, int y) => x + ", " + y;
 
+        public static string GenerateHexName(int x, int y)
+        {
+            string letter;
+            switch (x)
+            {
+                case 0:
+                    letter = "a";
+                    break;
+                case 1:
+                    letter = "b";
+                    break;
+                case 2:
+                    letter = "c";
+                    break;
+                case 3:
+                    letter = "d";
+                    break;
+                case 4:
+                    letter = "e";
+                    break;
+                default:
+                    letter = "XXX";
+                    break;
+            }
+
+            return letter + ", " + y;
+        }
+
+
+        public Tuple<int, int> GetHexCoordinates()
+        {
+            var coordinates = Name.Split(',');
+
+            int x;
+            switch (coordinates[0])
+            {
+                case "a":
+                    x = 0;
+                    break;
+                case "b":
+                    x = 1;
+                    break;
+                case "c":
+                    x = 2;
+                    break;
+                case "d":
+                    x = 3;
+                    break;
+                case "e":
+                    x = 4;
+                    break;
+                default:
+                    x = 666;
+                    break;
+            }
+
+            return new Tuple<int, int>(x, int.Parse(coordinates[1]));
+        }
+
+
+
         public Tuple<int, int> GetButtonCoordinates()
         {
             var coordinates = Name.Split(',');

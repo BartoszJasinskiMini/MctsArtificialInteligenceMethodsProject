@@ -12,7 +12,7 @@ namespace Havannah
     public partial class Form1 : Form
     {
 
-        private static int boardSize = 4, buttonSize = 56, buttonsLocationXCoordinate, buttonsLocationYCoordinate;
+        private static int boardSize = 3, buttonSize = 56, buttonsLocationXCoordinate, buttonsLocationYCoordinate;
         private GameState.GameState gameState = new GameState.GameState(boardSize);
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
         private bool didFirstPlayerClickedHexagonButton = true;
@@ -51,7 +51,55 @@ namespace Havannah
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
         {
+            func2();
 
+
+
+
+        }
+
+
+        private void func2()
+        {
+            for (int i = 0, k = 2 * boardSize - 2; i < 2 * boardSize - 1; i++, k--)
+            {
+                int z = i;
+                if (i > boardSize - 1)
+                {
+                    z = k;
+                }
+                for (int j = 0; j < boardSize + z; j++)
+                {
+                    var hexagonButton = new HexagonButton
+                    {
+                        ForeColor = White,
+                        BackColor = hexagonButtonsDefaultColor,
+                        FlatStyle = FlatStyle.Flat
+                    };
+                    hexagonButton.FlatAppearance.BorderSize = 0;
+
+
+                    hexagonButton.Text = GenerateHexName(i, j);
+                    hexagonButton.Name = GenerateHexName(i, j);
+                    hexagonButton.Size = new Size(buttonSize, buttonSize);
+                    hexagonButton.Click += new EventHandler(HexagonButtons_Click);
+                    int l = i;
+                    if (i > boardSize - 1)
+                    {
+                        l -= 1;
+                    }
+                    hexagonButton.Location = new Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * (boardSize - l + j) * buttonSize / 2.25),
+                    buttonsLocationYCoordinate - (int)(Sqrt(3) * buttonSize * j) + (int)(Sqrt(3) / 4 * buttonSize * (boardSize - i)));
+
+                    Controls.Add(hexagonButton);
+                }
+            }
+        }
+
+
+
+        private void func()
+        {
             for (int i = 0, k = 2 * boardSize - 2; i < 2 * boardSize - 1; i++, k--)
             {
                 int z = i;
@@ -81,7 +129,6 @@ namespace Havannah
                     Controls.Add(hexagonButton);
                 }
             }
-
         }
 
 
@@ -114,15 +161,29 @@ namespace Havannah
         private void HexagonButtons_Click(object sender, EventArgs e)
         {
             var hexagonButton = (HexagonButton)sender;
+            hexagonButton.Visible = false;
             //if(didFirstPlayerClickedHexagonButton)
             //hexagonButton.BackColor = didFirstPlayerClickedHexagonButton ? firstPlayerColor : secondPlayerColor;
             hexagonButton.BackColor = whichPlayerClicked == 0 || whichPlayerClicked == 1 ? firstPlayerColor : secondPlayerColor;
             infoBox.Text = hexagonButton.Name;
-            var buttonCoordinates = hexagonButton.GetButtonCoordinates();
+            var buttonCoordinates = hexagonButton.GetHexCoordinates();
             gameState.MakeMove(whichPlayerClicked == 0 || whichPlayerClicked == 1 ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
             gameState.PrintBoard();
-           // didFirstPlayerClickedHexagonButton = true;
+            // didFirstPlayerClickedHexagonButton = true;
         }
+
+        //private void HexagonButtons_Click(object sender, EventArgs e)
+        //{
+        //    var hexagonButton = (HexagonButton)sender;
+        //    //if(didFirstPlayerClickedHexagonButton)
+        //    //hexagonButton.BackColor = didFirstPlayerClickedHexagonButton ? firstPlayerColor : secondPlayerColor;
+        //    hexagonButton.BackColor = whichPlayerClicked == 0 || whichPlayerClicked == 1 ? firstPlayerColor : secondPlayerColor;
+        //    infoBox.Text = hexagonButton.Name;
+        //    var buttonCoordinates = hexagonButton.GetButtonCoordinates();
+        //    gameState.MakeMove(whichPlayerClicked == 0 || whichPlayerClicked == 1 ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
+        //    gameState.PrintBoard();
+        //   // didFirstPlayerClickedHexagonButton = true;
+        //}
 
 
 
