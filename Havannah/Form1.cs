@@ -65,16 +65,15 @@ namespace Havannah
                     z = k;
                 }
                 int l = i;
-                double m = 4;
+                int m = 4;
+                double n = 0;
                 if (i > boardSize - 1)
                 {
                     l -= (i - boardSize + 1);
-                    
+                    m = 2;
+                    n = Sqrt(3) / 4 * buttonSize;
                 }
-                if (i > boardSize)
-                {
-                    m = 1.5;
-                }
+
 
                 for (int j = 0; j < boardSize + z; j++)
                 {
@@ -93,7 +92,7 @@ namespace Havannah
                     hexagonButton.Click += new EventHandler(HexagonButtons_Click);
 
                     hexagonButton.Location = new Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * (boardSize - l + j) * buttonSize / 2.25),
-                    buttonsLocationYCoordinate - (int)(Sqrt(3) / 4 * buttonSize * j) + (int)(Sqrt(3) / m * buttonSize * (boardSize - i)));
+                    buttonsLocationYCoordinate - (int)(Sqrt(3) / 4 * buttonSize * j + n) + (int)(Sqrt(3) / m * buttonSize * (boardSize - i)));
 
                     Controls.Add(hexagonButton);
                 }
@@ -178,6 +177,7 @@ namespace Havannah
         private void HexagonButtons_Click(object sender, EventArgs e)
         {
             var hexagonButton = (HexagonButton)sender;
+            hexagonButton.Visible = false;
             hexagonButton.BackColor = whichPlayerClicked == 0 || whichPlayerClicked == 1 ? firstPlayerColor : secondPlayerColor;
             infoBox.Text = hexagonButton.Name;
 
