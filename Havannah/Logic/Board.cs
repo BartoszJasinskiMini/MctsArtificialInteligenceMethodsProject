@@ -136,21 +136,6 @@ namespace Havannah.Logic
 
         }
 
-        private bool CheckIfRing(int player)
-        {
-            return false;
-        }
-
-        private bool CheckIfBridge(int player)
-        {
-            return false;
-        }
-
-        private bool CheckIfFork(int player)
-        {
-            return false;
-        }
-
         public bool CheckIfClickIsCorrect(int x, int y)
         {
             if (x < 0 || y < 0 || x >= 2 * _size - 1)
@@ -172,6 +157,21 @@ namespace Havannah.Logic
             {
                 return false;
             }
+        }
+
+        private bool CheckIfRing(int player)
+        {
+            return false;
+        }
+
+        private bool CheckIfBridge(int player)
+        {
+            return false;
+        }
+
+        private bool CheckIfFork(int player)
+        {
+            return false;
         }
 
         private bool EvaluateClickCoordinates(int x, int y)

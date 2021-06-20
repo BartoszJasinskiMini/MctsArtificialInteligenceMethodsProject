@@ -17,6 +17,8 @@ namespace Havannah
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
         private bool didFirstPlayerClickedHexagonButton = true;
         private int whichPlayerClicked = 0;
+        private int moveTime = 10;
+
 
         public Form1()
         {
@@ -48,6 +50,11 @@ namespace Havannah
 
         //  gameState.CheckIfOneOfThePlayersWonGame();
         //       }
+
+            private void InvokeAlgorithm()
+        {
+
+        }
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
         {
