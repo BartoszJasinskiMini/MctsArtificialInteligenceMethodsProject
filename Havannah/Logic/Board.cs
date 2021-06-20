@@ -69,7 +69,7 @@ namespace Havannah.Logic
 
         public int CheckIfWon()
         {
-            if(CheckIfWon(1))
+            if (CheckIfWon(1))
             {
                 return 1;
             }

@@ -16,7 +16,6 @@ namespace Havannah
         private static int boardSize = 3, buttonSize = 56, buttonsLocationXCoordinate, buttonsLocationYCoordinate;
         private GameState.GameState gameState = new GameState.GameState(boardSize);
         private Color hexagonButtonsDefaultColor = SandyBrown, firstPlayerColor = ForestGreen, secondPlayerColor = Red;
-        private bool didFirstPlayerClickedHexagonButton = true;
         private int whichPlayerClicked = 0;
         private int moveTime = 1000;
         MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
@@ -33,7 +32,7 @@ namespace Havannah
             buttonsLocationYCoordinate = ClientSize.Height / 2 + boardSize / 2 * buttonSize - 80;
 
             Shown += CreateHavannahBoardDelegate;
-            InitTimer();
+          //  InitTimer();
         }
 
         // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
@@ -46,7 +45,6 @@ namespace Havannah
         public void ClickOnSpecificButton(int player, int x, int y)
         {
             whichPlayerClicked = player;
-            //didFirstPlayerClickedHexagonButton = player == 1;
             var hexagonButton = (HexagonButton)Controls[GenerateHexagonButtonName(x, y)];
             hexagonButton.PerformClick();
             
@@ -83,19 +81,20 @@ namespace Havannah
 
             Task<Board.Point> task = Task<Board.Point>.Factory.StartNew(() =>
             {
-                infoBox.Text = "WAIT FOR YOUR TURN";
+                //infoBox.Text = "WAIT FOR YOUR TURN";
 
                 var point = monteCarloTreeSearch.RunAlgorithm(gameState.Board, moveTime);
-                ClickOnSpecificButton(whichPlayerClicked, point);
-                if (whichPlayerClicked == 1)
-                {
-                    whichPlayerClicked = 2;
-                }
-                else if (whichPlayerClicked == 2)
-                {
-                    whichPlayerClicked = 1;
-                }
-                infoBox.Text = "MAKE MOVE";
+                ClickOnSpecificButton(1, point);
+                //if (whichPlayerClicked == 1 || whichPlayerClicked == 0)
+                //{
+                //    whichPlayerClicked = 2;
+                //}
+                //else if (whichPlayerClicked == 2)
+                //{
+                //    whichPlayerClicked = 1;
+                //}
+
+             //   infoBox.Text = "MAKE MOVE";
 
                 return point;
             });
@@ -238,8 +237,13 @@ namespace Havannah
             infoBox.Text = hexagonButton.Name;
 
             var buttonCoordinates = hexagonButton.GetButtonCoordinates(boardSize);
-            gameState.MakeMove(whichPlayerClicked == 0 || whichPlayerClicked == 1 ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
+            gameState.MakeMove((whichPlayerClicked == 0 || whichPlayerClicked == 1) ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
             gameState.PrintBoard();
+
+            if(gameState.CheckIfWon() != 0)
+            {
+                infoBox.Text = "SOMEONE WON GAME!!!";
+            }
 
             whichPlayerClicked = 0;
         }
