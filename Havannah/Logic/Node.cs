@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Havannah.Logic.Board;
 
 namespace Havannah.Logic
 {
@@ -21,6 +22,7 @@ namespace Havannah.Logic
         public List<Node> Children { get; private set; }
         public Node Parent { get; private set; }
         public Board Board { get; private set; }
+        public Point Move { get; private set; }
         public int WhichPlayerMoves { get; private set; }
 
         public void AddGame(bool ifWon)
@@ -37,11 +39,28 @@ namespace Havannah.Logic
             Board = board;
             WhichPlayerMoves = player;
         }
-
-        //UDT trzeba zaimplementować
+        public void SetMove(int x, int y)
+        {
+            Move = new Point(x, y);
+        }
         public Node GetNextNode()
         {
-            return null;
+            if (Children.Count == 0) return this;
+            double[] scores = new double[Children.Count];
+            double maxValue = 0.0;
+            int index = -1;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                double value = Children[i].WinRatio;
+                scores[i] = value;
+                if(value > maxValue)
+                {
+                    maxValue = value;
+                    index = i;
+                }
+            }
+            return Children[index];
+            
         }
     }
 }
