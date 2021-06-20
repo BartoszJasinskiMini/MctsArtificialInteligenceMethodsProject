@@ -78,7 +78,12 @@ namespace Havannah
 
         private void InvokeAlgorithm()
         {
-            ClickOnSpecificButton(1, monteCarloTreeSearch.RunAlgorithm(gameState.Board, moveTime));
+
+            infoBox.Text = "WAIT FOR YOUR TURN";
+            var point = monteCarloTreeSearch.RunAlgorithm(gameState.Board, moveTime);
+            ClickOnSpecificButton(2, point);
+            infoBox.Text = "MAKE MOVE";
+
         }
 
         private void CreateHavannahBoardDelegate(object sender, EventArgs e)
@@ -130,6 +135,7 @@ namespace Havannah
                 }
             }
         }
+
 
         //ITS NOT USED BUT DONT DELETE IT
         private void func()
