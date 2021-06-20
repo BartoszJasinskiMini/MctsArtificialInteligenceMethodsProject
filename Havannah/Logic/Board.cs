@@ -32,13 +32,13 @@ namespace Havannah.Logic
             _size = size;
             _grid = new int[2 * size - 1, 2 * size - 1];
 
-            for (int i = 0; i < _grid.GetLength(0); i++)
-            {
-                for (int j = 0; j < _grid.GetLength(1); j++)
-                {
-                    _grid[i, j] = -1;
-                }
-            }
+            //for (int i = 0; i < _grid.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < _grid.GetLength(1); j++)
+            //    {
+            //        _grid[i, j] = -1;
+            //    }
+            //}
 
             _freeCells = new List<Point>();
             for (int i = 0; i < size; i++)
@@ -119,7 +119,7 @@ namespace Havannah.Logic
             {
                 for (int j = 0; j < _grid.GetLength(1); j++)
                 {
-                    Console.Write(GenerateHexName(i, j) + " " + _grid[i, j] + "   ");
+                    Console.Write("[" + GenerateHexagonButtonName(i, j) + "] = " + _grid[i, j] + "   ");
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
