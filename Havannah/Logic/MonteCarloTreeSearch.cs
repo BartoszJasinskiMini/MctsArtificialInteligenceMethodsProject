@@ -98,3 +98,4 @@ namespace Havannah.Logic
         }
     }
 }
+

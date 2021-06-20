@@ -61,6 +61,7 @@
     <Compile Include="Logic\GameTree.cs" />
     <Compile Include="Logic\MonteCarloTreeSearch.cs" />
     <Compile Include="Logic\Node.cs" />
+    <Compile Include="Logic\Point.cs" />
     <Compile Include="Logic\ShapesStructure.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,8 +7,11 @@ namespace MctsArtificialIntelligenceMethods
     {
         public static void Main(string[] args)
         {
+            int boardSize = 4;
             MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
-            monteCarloTreeSearch.RunAlgorithm(new Board(4), 10000);
+            ShapesStructure.Size = boardSize;
+            Point res = monteCarloTreeSearch.RunAlgorithm(new Board(boardSize), 10000);
+            int k = 0;
         }
     }
 }

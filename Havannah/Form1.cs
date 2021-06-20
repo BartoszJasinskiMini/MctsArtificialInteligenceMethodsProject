@@ -36,7 +36,7 @@ namespace Havannah
         }
 
         // THIS FUNCTION IS FOR PLAYING HAVANNAH BY ALGORITHMS ON GUI
-        public void ClickOnSpecificButton(int player, Board.Point point)
+        public void ClickOnSpecificButton(int player, Havannah.Logic.Point point)
         {
             ClickOnSpecificButton(player, point.X, point.Y);
         }
@@ -123,7 +123,7 @@ namespace Havannah
                     hexagonButton.Size = new Size(buttonSize, buttonSize);
                     hexagonButton.Click += new EventHandler(HexagonButtons_Click);
 
-                    hexagonButton.Location = new Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * (boardSize - l + j) * buttonSize / 2.25),
+                    hexagonButton.Location = new System.Drawing.Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * (boardSize - l + j) * buttonSize / 2.25),
                     buttonsLocationYCoordinate - (int)(Sqrt(3) / 4 * buttonSize * j + n) + (int)(Sqrt(3) / m * buttonSize * (boardSize - i)));
 
                     Controls.Add(hexagonButton);
@@ -157,7 +157,7 @@ namespace Havannah
                     hexagonButton.Size = new Size(buttonSize, buttonSize);
                     hexagonButton.Click += new EventHandler(HexagonButtons_Click);
 
-                    hexagonButton.Location = new Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * i * buttonSize / 2.25),
+                    hexagonButton.Location = new System.Drawing.Point(buttonsLocationXCoordinate + (int)(Sqrt(3) * i * buttonSize / 2.25),
                         buttonsLocationYCoordinate - (int)(Sqrt(3) / 2 * buttonSize * j) + (int)(Sqrt(3) / 4 * buttonSize * z));
 
                     Controls.Add(hexagonButton);

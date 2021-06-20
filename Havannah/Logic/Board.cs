@@ -11,45 +11,19 @@ namespace Havannah.Logic
 {
     public class Board
     {
-        public class Point
-        {
-            public int X { get; private set; }
-            public int Y { get; private set; }
-            public Point(int x, int y)
-            {
-                X = x;
-                Y = y;
-            }
-            public override bool Equals(object obj)
-            {
-                return obj is Point point &&
-                       X == point.X &&
-                       Y == point.Y;
-            }
-            public Point Clone()
-            {
-                return new Point(X, Y);
-            }
-
-            public override int GetHashCode()
-            {
-                int hashCode = 1861411795;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
-                return hashCode;
-            }
-        }
-
         private int[,] _grid;
         private int _size;
         private List<Point> _freeCells;
+        private List<ShapesStructure> _playerStructures;
+        private List<ShapesStructure> _oponentStructues;
 
         public Board(int size)
         {
             _size = size;
             _grid = new int[2 * size - 1, 2 * size - 1];
             _freeCells = new List<Point>();
-
+            _playerStructures = new List<ShapesStructure>();
+            _oponentStructues = new List<ShapesStructure>();
             for (int i = 0; i < _grid.GetLength(0); i++)
             {
                 for (int j = 0; j < _grid.GetLength(1); j++)
@@ -66,7 +40,6 @@ namespace Havannah.Logic
                 }
             }
         }
-
         public int CheckIfWon()
         {
             if(CheckIfWon(1))
@@ -81,20 +54,15 @@ namespace Havannah.Logic
 
             return 0;
         }
-
         public bool CheckIfWon(int player)
         {
             return CheckIfRing(player) || CheckIfFork(player) || CheckIfBridge(player);
         }
-
-
-        public bool CheckIfDraw() { return false; }
-
+        public bool CheckIfDraw() { return _freeCells.Count == 0; }
         public Board Clone()
         {
-            return new Board(_size, _grid, _freeCells);
+            return new Board(_size, _grid, _freeCells, _playerStructures, _oponentStructues);
         }
-
         public bool MakeRandomMove(int player, out Point move)
         {
             move = null;
@@ -106,12 +74,10 @@ namespace Havannah.Logic
             MakeMove(player, randomPoint.X, randomPoint.Y);
             return true;
         }
-
         public bool MakeMove(int player, Point point)
         {
             return MakeMove(player, point.X, point.Y);
         }
-
         public bool MakeMove(int player, int x, int y)
         {
             EvaluateClickCoordinates(x, y);
@@ -122,12 +88,18 @@ namespace Havannah.Logic
                 _freeCells.Remove(new Point(x, y));
                 return true;
             }
+            if(player == 1)
+            {
+                ExpandStructures(x, y, _playerStructures);
+            }
+            if(player == 2)
+            {
+                ExpandStructures(x, y, _oponentStructues);
+            }
 
             return false;  
         }
-
         public void ResetBoard() { Array.Clear(_grid, 0, _grid.Length); }
-
         public void PrintBoard()
         {
             Console.WriteLine("*********************************************************");
@@ -143,9 +115,7 @@ namespace Havannah.Logic
 
             Console.WriteLine("*********************************************************");
             Console.Write(Environment.NewLine + Environment.NewLine);
-
         }
-
         public bool CheckIfClickIsCorrect(int x, int y)
         {
             if (x < 0 || y < 0 || x >= 2 * _size - 1)
@@ -168,22 +138,50 @@ namespace Havannah.Logic
                 return false;
             }
         }
-
         private bool CheckIfRing(int player)
         {
             return false;
         }
-
         private bool CheckIfBridge(int player)
         {
+            if(player == 1)
+            {
+                foreach(var st in _playerStructures)
+                {
+                    if (st.CornersCount == 2)
+                        return true;
+                }
+            }
+            if (player == 2)
+            {
+                foreach (var st in _oponentStructues)
+                {
+                    if (st.CornersCount == 2)
+                        return true;
+                }
+            }
             return false;
         }
-
         private bool CheckIfFork(int player)
         {
+            if(player == 1)
+            {
+                foreach(var st in _playerStructures)
+                {
+                    if (st.EdgesCount == 3)
+                        return true;
+                }
+            }
+            if(player == 2)
+            {
+                foreach (var st in _oponentStructues)
+                {
+                    if (st.EdgesCount == 3)
+                        return true;
+                }
+            }
             return false;
         }
-
         private bool EvaluateClickCoordinates(int x, int y)
         {
             if (CheckIfClickIsCorrect(x, y))
@@ -195,8 +193,37 @@ namespace Havannah.Logic
                 throw new Exception("CLICK: " + GenerateHexagonButtonName(x, y) + " OUTSIDE BOARD BOUNDARIES");
             }
         }
-
-        private Board(int size, int[,] grid, List<Point> freeCells)
+        private void ExpandStructures(int x, int y, List<ShapesStructure> structures)
+        {
+            List<ShapesStructure> neighbouringStructures = new List<ShapesStructure>();
+            for (int i = structures.Count; i <= 0; i--)
+            {
+                if(structures[i].isNeightbour(x, y))
+                {
+                    neighbouringStructures.Add(structures[i]);
+                    structures.RemoveAt(i);
+                }
+            }
+            if(neighbouringStructures.Count == 0)
+            {
+                ShapesStructure structure = new ShapesStructure();
+                structure.AddPoint(new Point(x, y));
+                structures.Add(structure);
+            }
+            while(neighbouringStructures.Count > 1)
+            {
+                int lastIndex = neighbouringStructures.Count - 1;
+                ShapesStructure s1 = neighbouringStructures[lastIndex];
+                neighbouringStructures.RemoveAt(lastIndex);
+                lastIndex--;
+                ShapesStructure s2 = neighbouringStructures[lastIndex];
+                neighbouringStructures.RemoveAt(lastIndex);
+                neighbouringStructures.Add(ShapesStructure.Merge(s1, s2));
+            }
+            neighbouringStructures[neighbouringStructures.Count - 1].AddPoint(new Point(x, y));
+            structures.Add(neighbouringStructures[neighbouringStructures.Count - 1]);
+        }
+        private Board(int size, int[,] grid, List<Point> freeCells, List<ShapesStructure> playerStructures, List<ShapesStructure> opponentStructures)
         {
             _size = size;
             _grid = new int[grid.GetLength(0), grid.GetLength(1)];
@@ -209,6 +236,10 @@ namespace Havannah.Logic
             }
             _freeCells = new List<Point>();
             freeCells.ForEach(cell => _freeCells.Add(new Point(cell.X, cell.Y)));
+            _playerStructures = new List<ShapesStructure>();
+            playerStructures.ForEach(structure => _playerStructures.Add(structure.Clone()));
+            _oponentStructues = new List<ShapesStructure>();
+            opponentStructures.ForEach(structure => _oponentStructues.Add(structure.Clone()));
         }
     }
 }
