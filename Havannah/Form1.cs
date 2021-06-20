@@ -181,7 +181,7 @@ namespace Havannah
             hexagonButton.BackColor = whichPlayerClicked == 0 || whichPlayerClicked == 1 ? firstPlayerColor : secondPlayerColor;
             infoBox.Text = hexagonButton.Name;
 
-            var buttonCoordinates = hexagonButton.GetButtonCoordinates();
+            var buttonCoordinates = hexagonButton.GetButtonCoordinates(boardSize);
             gameState.MakeMove(whichPlayerClicked == 0 || whichPlayerClicked == 1 ? 1 : 2, buttonCoordinates.Item1, buttonCoordinates.Item2);
             gameState.PrintBoard();
         }

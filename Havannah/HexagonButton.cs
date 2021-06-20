@@ -92,12 +92,22 @@ namespace Havannah
 
 
 
+        public Tuple<int, int> GetButtonCoordinates(int boardSize)
+        {
+            var coordinates = Name.Split(',');
+            int x = int.Parse(coordinates[0]);
+            int y = int.Parse(coordinates[1]);
+
+            return new Tuple<int, int>(x, y + (x > boardSize - 1 ? x - boardSize + 1 : 0));
+        }
+
         public Tuple<int, int> GetButtonCoordinates()
         {
             var coordinates = Name.Split(',');
 
             return new Tuple<int, int>(int.Parse(coordinates[0]), int.Parse(coordinates[1]));
         }
+
 
     }
 }
