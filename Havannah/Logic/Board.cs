@@ -86,17 +86,16 @@ namespace Havannah.Logic
             {
                 _grid[x, y] = player;
                 _freeCells.Remove(new Point(x, y));
+                if (player == 1)
+                {
+                    ExpandStructures(x, y, _playerStructures);
+                }
+                if (player == 2)
+                {
+                    ExpandStructures(x, y, _oponentStructues);
+                }
                 return true;
             }
-            if(player == 1)
-            {
-                ExpandStructures(x, y, _playerStructures);
-            }
-            if(player == 2)
-            {
-                ExpandStructures(x, y, _oponentStructues);
-            }
-
             return false;  
         }
         public void ResetBoard() { Array.Clear(_grid, 0, _grid.Length); }
@@ -196,7 +195,7 @@ namespace Havannah.Logic
         private void ExpandStructures(int x, int y, List<ShapesStructure> structures)
         {
             List<ShapesStructure> neighbouringStructures = new List<ShapesStructure>();
-            for (int i = structures.Count; i <= 0; i--)
+            for (int i = structures.Count - 1; i >= 0; i--)
             {
                 if(structures[i].isNeightbour(x, y))
                 {
@@ -209,6 +208,7 @@ namespace Havannah.Logic
                 ShapesStructure structure = new ShapesStructure();
                 structure.AddPoint(new Point(x, y));
                 structures.Add(structure);
+                return;
             }
             while(neighbouringStructures.Count > 1)
             {

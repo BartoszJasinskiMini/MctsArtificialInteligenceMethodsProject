@@ -79,7 +79,7 @@ namespace Havannah
         {
 
 
-            Task<Board.Point> task = Task<Board.Point>.Factory.StartNew(() =>
+            Task<Logic.Point> task = Task<Logic.Point>.Factory.StartNew(() =>
             {
                 //infoBox.Text = "WAIT FOR YOUR TURN";
 
