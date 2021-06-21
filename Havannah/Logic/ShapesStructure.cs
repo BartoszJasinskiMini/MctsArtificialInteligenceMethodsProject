@@ -12,13 +12,13 @@ namespace Havannah.Logic
         public static int Size { set; private get; }
         private List<int> _corners;
         private List<int> _edges;
-        private List<Point> _points;
+        public List<Point> Points { get; private set; }
         public int CornersCount { get { return _corners.Count; } }
         public int EdgesCount { get { return _edges.Count; } }
 
         public ShapesStructure()
         {
-            _points = new List<Point>();
+            Points = new List<Point>();
             _edges = new List<int>();
             _corners = new List<int>();
         }
@@ -28,12 +28,12 @@ namespace Havannah.Logic
             corners.ForEach(corner => _corners.Add(corner));
             _edges = new List<int>();
             edges.ForEach(edge => _edges.Add(edge));
-            _points = new List<Point>();
-            points.ForEach(point => _points.Add(new Point(point.X, point.Y)));
+            Points = new List<Point>();
+            points.ForEach(point => Points.Add(new Point(point.X, point.Y)));
         }
         public bool isNeightbour(int x, int y)
         {
-            foreach(var point in _points)
+            foreach(var point in Points)
             {
                 if (Point.isNeighbour(point, new Point(x, y)))
                     return true;
@@ -42,7 +42,7 @@ namespace Havannah.Logic
         }
         public void AddPoint(Point point)
         {
-            _points.Add(point);
+            Points.Add(point);
             if (IfOnCorner(point, out int cornerNumber))
                 _corners.Add(cornerNumber);
             if (IfOnEdge(point, out int edgeNumber) && !_edges.Contains(edgeNumber))
@@ -123,7 +123,7 @@ namespace Havannah.Logic
         }
         public ShapesStructure Clone()
         {
-            return new ShapesStructure(_corners, _edges, _points);
+            return new ShapesStructure(_corners, _edges, Points);
         }
         public static ShapesStructure Merge(ShapesStructure s1, ShapesStructure s2)
         {
@@ -137,10 +137,10 @@ namespace Havannah.Logic
                 if (!s2._corners.Contains(corner))
                     s2._corners.Add(corner);
             }
-            foreach(var point in s1._points)
+            foreach(var point in s1.Points)
             {
-                if (!s2._points.Contains(point))
-                    s2._points.Add(point);
+                if (!s2.Points.Contains(point))
+                    s2.Points.Add(point);
             }
             return s2;
         }

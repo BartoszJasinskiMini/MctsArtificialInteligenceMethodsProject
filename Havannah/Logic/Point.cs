@@ -38,7 +38,7 @@ namespace Havannah.Logic
             return (p1.X == p2.X && Math.Abs(p1.Y - p2.Y) == 1) 
                 || (p1.Y == p2.Y && Math.Abs(p1.X - p2.X) == 1) 
                 || (p1.X - p2.X == 1 && p1.Y - p2.Y == 1) 
-                || (p1.X - p2.X == -11 && p1.Y - p2.Y == -1);
+                || (p1.X - p2.X == -1 && p1.Y - p2.Y == -1);
         }
     }
 }

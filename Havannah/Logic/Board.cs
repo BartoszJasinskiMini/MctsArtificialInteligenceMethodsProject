@@ -139,6 +139,38 @@ namespace Havannah.Logic
         }
         private bool CheckIfRing(int player)
         {
+            List<ShapesStructure> structures = player == 1 ? _playerStructures : _oponentStructues;
+            foreach (var st in _playerStructures)
+            {
+                bool change = true;
+                ShapesStructure shapes = st;
+                while (change)
+                {
+                    change = false;
+                    for (int i = shapes.Points.Count - 1; i >= 0; i--)
+                    {
+                        int neighbourCount = 0;
+                        List<int> neighbourIndexes = new List<int>();
+                        for (int j = shapes.Points.Count - 1; j >= 0; j--)
+                        {
+                            if (i != j && Point.isNeighbour(shapes.Points[i], shapes.Points[j]))
+                            {
+                                neighbourCount++;
+                                neighbourIndexes.Add(j);
+                            }
+                        }
+                        if (neighbourCount > 2 || (neighbourCount == 2 && !Point.isNeighbour(shapes.Points[neighbourIndexes[0]], shapes.Points[neighbourIndexes[1]])))
+                            continue;
+                        else
+                        {
+                            shapes.Points.RemoveAt(i);
+                            change = true;
+                        }
+                    }
+                }
+                if (shapes.Points.Count >= 6)
+                    return true;
+            }
             return false;
         }
         private bool CheckIfBridge(int player)
