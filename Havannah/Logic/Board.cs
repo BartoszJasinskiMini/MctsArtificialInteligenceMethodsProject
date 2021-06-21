@@ -107,7 +107,8 @@ namespace Havannah.Logic
             {
                 for (int j = 0; j < _grid.GetLength(1); j++)
                 {
-                    Console.Write("[" + GenerateHexagonButtonName(i, j) + "] = " + _grid[i, j] + "   ");
+                    //Console.Write("[" + GenerateHexagonButtonName(i, j) + "] = " + _grid[i, j] + "   ");
+                    Console.Write("[" + _grid[i, j] + "] = "  + "   ");
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }

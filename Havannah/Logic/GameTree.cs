@@ -7,7 +7,7 @@ using static Havannah.Logic.Board;
 
 namespace Havannah.Logic
 {
-    class GameTree
+    public class GameTree
     {
         public Node Root { get; private set; }
 

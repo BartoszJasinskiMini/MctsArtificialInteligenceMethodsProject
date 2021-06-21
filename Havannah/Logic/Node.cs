@@ -7,8 +7,9 @@ using static Havannah.Logic.Board;
 
 namespace Havannah.Logic
 {
-    class Node
+    public class Node
     {
+        
         public int Wins { get; private set; }
         public int AllGames { get; private set; }
         public double WinRatio { 
@@ -51,7 +52,8 @@ namespace Havannah.Logic
             int index = -1;
             for (int i = 0; i < Children.Count; i++)
             {
-                double value = Children[i].WinRatio;
+                double comp = Children[i].AllGames > 0 ? Math.Sqrt(Math.Log(AllGames) / Children[i].AllGames) : double.MaxValue;
+                double value = Children[i].WinRatio + Math.Sqrt(2) * comp;
                 scores[i] = value;
                 if(value >= maxValue)
                 {

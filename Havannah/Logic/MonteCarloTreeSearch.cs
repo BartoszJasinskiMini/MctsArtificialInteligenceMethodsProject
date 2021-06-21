@@ -12,10 +12,11 @@ namespace Havannah.Logic
     public class MonteCarloTreeSearch
     {
         private const double alpha = 0.95;
+        private const int howManyChildren = 5;
         private const int _player1 = 1;
         private const int _player2 = 2;
         private const double _minTimeLeft = 1000;
-        private GameTree _gameTree;
+        public GameTree _gameTree;
         private List<Node> _path;
 
         public Point RunAlgorithm(Board board, double time)
@@ -50,13 +51,16 @@ namespace Havannah.Logic
             if (!leafNode.Board.CheckIfWon(_player1) && !leafNode.Board.CheckIfWon(_player2) && !leafNode.Board.CheckIfDraw())
             {
                 Board childBoard = leafNode.Board.Clone();
-                if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1, out Point move))
+                for (int i = 0; i < howManyChildren; i++)
                 {
-                    Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
-                    childNode.SetMove(move.X, move.Y);
-                    if (!leafNode.Children.Contains(childNode))
-                        leafNode.Children.Add(childNode);
-                    result = childNode;
+                    if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1, out Point move))
+                    {
+                        Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
+                        childNode.SetMove(move.X, move.Y);
+                        if (!leafNode.Children.Contains(childNode))
+                            leafNode.Children.Add(childNode);
+                        result = childNode;
+                    }
                 }
             }
             _path.Add(result);
@@ -85,16 +89,19 @@ namespace Havannah.Logic
                 }
                 stopwatch.Stop();
                 timeLeft -= stopwatch.Elapsed.TotalMilliseconds;
+                player = player == _player1 ? _player2 : _player1;
             }
             return Result.Timeout;
 
         }
         private void Backpropagation(Result result)
         {
+            Console.WriteLine(result.ToString());
             foreach(var node in _path)
             {
                 node.AddGame(result == Result.Win);
             }
+            _path.Clear();
         }
     }
 }

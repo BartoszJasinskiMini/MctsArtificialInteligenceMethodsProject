@@ -7,15 +7,22 @@ namespace MctsArtificialIntelligenceMethods
     {
         public static void Main(string[] args)
         {
-            /*int boardSize = 4;
+            int boardSize = 4;
             MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch();
             ShapesStructure.Size = boardSize;
-            Point res = monteCarloTreeSearch.RunAlgorithm(new Board(boardSize), 10000);
-            int k = 0;*/
-            Console.WriteLine("Test numer 1: " + Test1().ToString());
+            Point res = monteCarloTreeSearch.RunAlgorithm(new Board(boardSize), 1000000);
+            Node lastnode = monteCarloTreeSearch._gameTree.Root;
+            while(!lastnode.isLeaf)
+            {
+                lastnode = lastnode.Children[0];
+            }
+            lastnode.Board.PrintBoard();
+            int k = 0;
+
+            /*Console.WriteLine("Test numer 1: " + Test1().ToString());
             Console.WriteLine("Test numer 2: " + Test2().ToString());
             Console.WriteLine("Test numer 3: " + Test3().ToString());
-            Console.WriteLine("Test numer 4: " + Test4().ToString());
+            Console.WriteLine("Test numer 4: " + Test4().ToString());*/
 
         }
 
