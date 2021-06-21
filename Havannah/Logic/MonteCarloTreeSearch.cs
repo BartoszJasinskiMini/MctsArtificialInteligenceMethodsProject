@@ -15,7 +15,7 @@ namespace Havannah.Logic
         private const int howManyChildren = 5;
         private const int _player1 = 1;
         private const int _player2 = 2;
-        private const double _minTimeLeft = 1000;
+        private const double _minTimeLeft = 100;
         public GameTree _gameTree;
         private List<Node> _path;
 
@@ -96,7 +96,6 @@ namespace Havannah.Logic
         }
         private void Backpropagation(Result result)
         {
-            Console.WriteLine(result.ToString());
             foreach(var node in _path)
             {
                 node.AddGame(result == Result.Win);
