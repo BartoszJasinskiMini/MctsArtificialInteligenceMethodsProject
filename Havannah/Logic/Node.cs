@@ -62,7 +62,31 @@ namespace Havannah.Logic
                 }
             }
             return Children[index];
-            
+        }
+        public Node GetNextRaveNode(List<RaveNode> raveNodes)
+        {
+            if (Children.Count == 0) return this;
+            double[] scores = new double[Children.Count];
+            double maxValue = 0.0;
+            double raveComp = 0.0;
+            int index = -1;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                double comp = Children[i].AllGames > 0 ? Math.Sqrt(Math.Log(AllGames) / Children[i].AllGames) : double.MaxValue;
+                RaveNode raveNode = raveNodes.FindLast(r => r.Point.Equals(Children[i].Move));
+                if(raveNode != null)
+                {
+                    raveComp = raveNode.Score;
+                }
+                double value = Children[i].WinRatio + Math.Sqrt(2) * comp + raveComp;
+                scores[i] = value;
+                if (value >= maxValue)
+                {
+                    maxValue = value;
+                    index = i;
+                }
+            }
+            return Children[index];
         }
     }
 }

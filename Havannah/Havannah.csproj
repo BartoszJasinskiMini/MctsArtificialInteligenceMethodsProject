@@ -62,6 +62,8 @@
     <Compile Include="Logic\MonteCarloTreeSearch.cs" />
     <Compile Include="Logic\Node.cs" />
     <Compile Include="Logic\Point.cs" />
+    <Compile Include="Logic\RaveAlgorithm.cs" />
+    <Compile Include="Logic\RaveNode.cs" />
     <Compile Include="Logic\ShapesStructure.cs" />
     <Compile Include="Logic\SmartPlayouts.cs" />
     <Compile Include="Program.cs" />

@@ -30,15 +30,18 @@ namespace MctsArtificialIntelligenceMethods
                 for (int j = 0; j < boardSizes; j++)
                 {
                     ShapesStructure.Size = 4 + j * 2;
-                    NormalVsSmartPlayouts(4 + j * 2, 1000.0, true, "out.txt");
+                    NormalVsSmartPlayouts(4 + j * 2, 1000.0, false, "out.txt");
                 }
                 for (int k = 0; k < times; k++)
                 {
                     ShapesStructure.Size = 4;
-                    NormalVsSmartPlayouts(4, 500.0 + k * 500.0, true, "out.txt");
+                    NormalVsSmartPlayouts(4, 500.0 + k * 500.0, false, "out.txt");
                 }
             }
 
+            /*            RaveAlgorithm raveAlgorithm = new RaveAlgorithm();
+                        Point res = raveAlgorithm.RunAlgorithm(new Board(boardSize), 10000);
+                        int k = 0;*/
 
             /*Console.WriteLine("Test numer 1: " + Test1().ToString());
             Console.WriteLine("Test numer 2: " + Test2().ToString());

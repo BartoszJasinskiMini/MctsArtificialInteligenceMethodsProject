@@ -48,18 +48,15 @@ namespace Havannah.Logic
         {
             Node result = leafNode;
             if (!leafNode.Board.CheckIfWon(_player1) && !leafNode.Board.CheckIfWon(_player2) && !leafNode.Board.CheckIfDraw())
-            {       
-                for (int i = 0; i < howManyChildren; i++)
+            {
+                Board childBoard = leafNode.Board.Clone();
+                if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves, out Point move))
                 {
-                    Board childBoard = leafNode.Board.Clone();
-                    if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves, out Point move))
-                    {
-                        Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
-                        childNode.SetMove(move.X, move.Y);
-                        if (!leafNode.Children.Contains(childNode))
-                            leafNode.Children.Add(childNode);
-                        result = childNode;
-                    }
+                    Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
+                    childNode.SetMove(move.X, move.Y);
+                    if (!leafNode.Children.Contains(childNode))
+                        leafNode.Children.Add(childNode);
+                    result = childNode;
                 }
             }
             _path.Add(result);

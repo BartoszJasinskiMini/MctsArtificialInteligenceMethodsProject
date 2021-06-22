@@ -4,12 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Havannah.Logic.Board;
 
 namespace Havannah.Logic
 {
-    enum Result {  Win, Loss, Draw, Timeout }
-    public class MonteCarloTreeSearch
+    public class RaveAlgorithm
     {
         private const double alpha = 0.95;
         private const int _player1 = 1;
@@ -18,12 +16,15 @@ namespace Havannah.Logic
         public GameTree _gameTree;
         private List<Node> _path;
 
+        private List<RaveNode> _raveNodes;
+
         public Point RunAlgorithm(Board board, double time)
-        {   
+        {
             time = alpha * time;
             _gameTree = new GameTree(board, _player1);
             _path = new List<Node>();
-            while(time > 0)
+            _raveNodes = new List<RaveNode>();
+            while (time > 0)
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -39,8 +40,8 @@ namespace Havannah.Logic
             _path.Add(currentNode);
             while (!currentNode.isLeaf)
             {
-                currentNode = currentNode.GetNextNode();
-                if(currentNode.Parent != null)
+                currentNode = currentNode.GetNextRaveNode(_raveNodes);
+                if (currentNode.Parent != null)
                     _path.Add(currentNode);
             }
             return currentNode;
@@ -66,7 +67,7 @@ namespace Havannah.Logic
         private Result Simulation(Node node, double timeLeft)
         {
             Board board = node.Board.Clone();
-            int player = node.WhichPlayerMoves /*== _player1 ? _player2 : _player1*/;
+            int player = node.WhichPlayerMoves;
             while (timeLeft > _minTimeLeft)
             {
                 Stopwatch stopwatch = new Stopwatch();
@@ -94,12 +95,23 @@ namespace Havannah.Logic
         }
         private void Backpropagation(Result result)
         {
-            foreach(var node in _path)
+            foreach (var node in _path)
             {
                 node.AddGame(result == Result.Win);
+                if (node.Move != null)
+                {
+                    RaveNode raveNode = _raveNodes.FindLast(r => r.Point.Equals(node.Move));
+                    if (raveNode != null)
+                    {
+                        raveNode.AddGame(node.WhichPlayerMoves != _player1);
+                    }
+                    else
+                    {
+                        _raveNodes.Add(new RaveNode(node.Move));
+                    } 
+                }
             }
             _path.Clear();
         }
     }
 }
-
