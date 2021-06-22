@@ -27,15 +27,28 @@ namespace MctsArtificialIntelligenceMethods
 
             for (int i = 0; i < gamesCount; i++)
             {
-                for (int j = 0; j < boardSizes; j++)
+                for (int j = 1; j < boardSizes; j++)
                 {
                     ShapesStructure.Size = 4 + j * 2;
-                    NormalVsSmartPlayouts(4 + j * 2, 1000.0, false, "out.txt");
+                    RaveVsSmartPlayouts(4 + j * 2, 1000.0, true, "out.txt");
                 }
-                for (int k = 0; k < times; k++)
+                for (int k = 0; k < times; k+=2)
                 {
                     ShapesStructure.Size = 4;
-                    NormalVsSmartPlayouts(4, 500.0 + k * 500.0, false, "out.txt");
+                    RaveVsSmartPlayouts(4, 500.0 + k * 500.0, true, "out.txt");
+                }
+            }
+            for (int i = 0; i < gamesCount; i++)
+            {
+                for (int j = 1; j < boardSizes; j++)
+                {
+                    ShapesStructure.Size = 4 + j * 2;
+                    RaveVsSmartPlayouts(4 + j * 2, 1000.0, false, "out.txt");
+                }
+                for (int k = 0; k < times; k+=2)
+                {
+                    ShapesStructure.Size = 4;
+                    RaveVsSmartPlayouts(4, 500.0 + k * 500.0, false, "out.txt");
                 }
             }
 
@@ -47,6 +60,49 @@ namespace MctsArtificialIntelligenceMethods
             Console.WriteLine("Test numer 2: " + Test2().ToString());
             Console.WriteLine("Test numer 3: " + Test3().ToString());
             Console.WriteLine("Test numer 4: " + Test4().ToString());*/
+
+        }
+
+        public static void RaveVsSmartPlayouts(int boardSize, double timePerMove, bool ifRaveFirst, string outPutFileName)
+        {
+            RaveAlgorithm raveAlgorithm = new RaveAlgorithm();
+            SmartPlayouts smartPlayouts = new SmartPlayouts();
+            Board board = new Board(boardSize);
+            string line = "Board size: " + boardSize.ToString() + " Time per move: " + timePerMove.ToString() + " Normal first: " + ifRaveFirst.ToString();
+            while (board.FreeCells.Count > 0)
+            {
+                Point move = null;
+                if (ifRaveFirst)
+                {
+                    move = raveAlgorithm.RunAlgorithm(board, timePerMove);
+                }
+                else
+                {
+                    move = smartPlayouts.RunAlgorithm(board, timePerMove);
+                }
+                board.MakeMove(ifRaveFirst ? 1 : 2, move);
+                ifRaveFirst = !ifRaveFirst;
+                if (board.CheckIfWon(1))
+                {
+                    line += " -> Rave Algorithm wins";
+                    break;
+                }
+                if (board.CheckIfWon(2))
+                {
+                    line += " -> Smart Playouts wins";
+                    break;
+                }
+                if (board.CheckIfDraw())
+                {
+                    line += " -> Draw";
+                    break;
+                }
+            }
+            Console.WriteLine(line);
+            using (StreamWriter sw = File.AppendText(outPutFileName))
+            {
+                sw.WriteLine(line);
+            }
 
         }
 
