@@ -36,9 +36,10 @@
             // 
             // restartGame
             // 
-            this.restartGame.Location = new System.Drawing.Point(13, 13);
+            this.restartGame.Location = new System.Drawing.Point(17, 16);
+            this.restartGame.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.restartGame.Name = "restartGame";
-            this.restartGame.Size = new System.Drawing.Size(75, 34);
+            this.restartGame.Size = new System.Drawing.Size(100, 42);
             this.restartGame.TabIndex = 0;
             this.restartGame.Text = "Restart Game";
             this.restartGame.UseVisualStyleBackColor = true;
@@ -46,22 +47,24 @@
             // 
             // infoBox
             // 
-            this.infoBox.Location = new System.Drawing.Point(13, 53);
+            this.infoBox.Location = new System.Drawing.Point(17, 65);
+            this.infoBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.infoBox.Name = "infoBox";
-            this.infoBox.Size = new System.Drawing.Size(178, 41);
+            this.infoBox.Size = new System.Drawing.Size(236, 50);
             this.infoBox.TabIndex = 1;
             this.infoBox.Text = "";
             this.infoBox.TextChanged += new System.EventHandler(this.infoBox_TextChanged);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1384, 962);
+            this.ClientSize = new System.Drawing.Size(1845, 1061);
             this.Controls.Add(this.infoBox);
             this.Controls.Add(this.restartGame);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Havannah";
             this.ResumeLayout(false);
 
         }
