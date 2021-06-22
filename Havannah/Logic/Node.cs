@@ -19,7 +19,7 @@ namespace Havannah.Logic
                 return 0.0;
             }
         }
-        public bool isLeaf { get { return Children.Count == 0; } }
+        public bool isLeaf { get { return Children.Count < 5; } }
         public List<Node> Children { get; private set; }
         public Node Parent { get; private set; }
         public Board Board { get; private set; }

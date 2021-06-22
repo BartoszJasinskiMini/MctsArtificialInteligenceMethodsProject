@@ -13,7 +13,7 @@ namespace Havannah.Logic
     {
         private int[,] _grid;
         private int _size;
-        private List<Point> _freeCells;
+        public List<Point> FreeCells { get; private set; }
         private List<ShapesStructure> _playerStructures;
         private List<ShapesStructure> _oponentStructues;
 
@@ -21,7 +21,7 @@ namespace Havannah.Logic
         {
             _size = size;
             _grid = new int[2 * size - 1, 2 * size - 1];
-            _freeCells = new List<Point>();
+            FreeCells = new List<Point>();
             _playerStructures = new List<ShapesStructure>();
             _oponentStructues = new List<ShapesStructure>();
             for (int i = 0; i < _grid.GetLength(0); i++)
@@ -31,7 +31,7 @@ namespace Havannah.Logic
                     if(CheckIfClickIsCorrect(i, j))
                     {
                         _grid[i, j] = 0;
-                        _freeCells.Add(new Point(i, j));
+                        FreeCells.Add(new Point(i, j));
                     }
                     else
                     {
@@ -58,18 +58,18 @@ namespace Havannah.Logic
         {
             return CheckIfRing(player) || CheckIfFork(player) || CheckIfBridge(player);
         }
-        public bool CheckIfDraw() { return _freeCells.Count == 0; }
+        public bool CheckIfDraw() { return FreeCells.Count == 0; }
         public Board Clone()
         {
-            return new Board(_size, _grid, _freeCells, _playerStructures, _oponentStructues);
+            return new Board(_size, _grid, FreeCells, _playerStructures, _oponentStructues);
         }
         public bool MakeRandomMove(int player, out Point move)
         {
             move = null;
-            if (_freeCells.Count <= 0) return false;
+            if (FreeCells.Count <= 0) return false;
             Random random = new Random();
-            int randomPosition = random.Next(0, _freeCells.Count);
-            Point randomPoint = _freeCells[randomPosition];
+            int randomPosition = random.Next(0, FreeCells.Count);
+            Point randomPoint = FreeCells[randomPosition];
             move = randomPoint.Clone();
             MakeMove(player, randomPoint.X, randomPoint.Y);
             return true;
@@ -78,6 +78,21 @@ namespace Havannah.Logic
         {
             return MakeMove(player, point.X, point.Y);
         }
+        public bool MakeSmartMove(int player, out Point move)
+        {
+            move = null;
+            if (FreeCells.Count <= 0) return false;
+            for (int i = 0; i < FreeCells.Count; i++)
+            {
+                if(HasNeighbours(FreeCells[i]))
+                {
+                    move = FreeCells[i].Clone();
+                    MakeMove(player, move.X, move.Y);
+                    return true;
+                }
+            }
+            return false;
+        }
         public bool MakeMove(int player, int x, int y)
         {
             EvaluateClickCoordinates(x, y);
@@ -85,7 +100,7 @@ namespace Havannah.Logic
             if (_grid[x, y] == 0)
             {
                 _grid[x, y] = player;
-                _freeCells.Remove(new Point(x, y));
+                FreeCells.Remove(new Point(x, y));
                 if (player == 1)
                 {
                     ExpandStructures(x, y, _playerStructures);
@@ -144,7 +159,7 @@ namespace Havannah.Logic
             foreach (var st in _playerStructures)
             {
                 bool change = true;
-                ShapesStructure shapes = st;
+                ShapesStructure shapes = st.Clone();
                 while (change)
                 {
                     change = false;
@@ -267,12 +282,28 @@ namespace Havannah.Logic
                     _grid[i, j] = grid[i, j];
                 }
             }
-            _freeCells = new List<Point>();
-            freeCells.ForEach(cell => _freeCells.Add(new Point(cell.X, cell.Y)));
+            FreeCells = new List<Point>();
+            freeCells.ForEach(cell => FreeCells.Add(new Point(cell.X, cell.Y)));
             _playerStructures = new List<ShapesStructure>();
             playerStructures.ForEach(structure => _playerStructures.Add(structure.Clone()));
             _oponentStructues = new List<ShapesStructure>();
             opponentStructures.ForEach(structure => _oponentStructues.Add(structure.Clone()));
+        }
+        private bool HasNeighbours(Point point)
+        {
+            if (point.X - 1 >= 0 && _grid[point.X - 1, point.Y] > 0)
+                return true;
+            if (point.Y - 1 >= 0 && _grid[point.X, point.Y - 1] > 0)
+                return true;
+            if (point.Y - 1 >= 0 && point.X - 1 >= 0 && _grid[point.X - 1, point.Y - 1] > 0)
+                return true;
+            if (point.X + 1 <= 2 * _size - 2 && _grid[point.X + 1, point.Y] > 0)
+                return true;
+            if (point.Y + 1 <= 2 * _size - 2 && _grid[point.X, point.Y + 1] > 0)
+                return true;
+            if (point.Y + 1 <= 2 * _size - 2 && point.X + 1 <= 2 * _size - 2 && _grid[point.X + 1, point.Y + 1] > 0)
+                return true;
+            return false;
         }
     }
 }

@@ -4,14 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Havannah.Logic.Board;
 
 namespace Havannah.Logic
 {
-    enum Result {  Win, Loss, Draw, Timeout }
-    public class MonteCarloTreeSearch
+    public class SmartPlayouts
     {
         private const double alpha = 0.95;
+        private const int howManyChildren = 5;
+        private const int kParam = 20;
         private const int _player1 = 1;
         private const int _player2 = 2;
         private const double _minTimeLeft = 100;
@@ -19,11 +19,11 @@ namespace Havannah.Logic
         private List<Node> _path;
 
         public Point RunAlgorithm(Board board, double time)
-        {   
+        {
             time = alpha * time;
             _gameTree = new GameTree(board, _player1);
             _path = new List<Node>();
-            while(time > 0)
+            while (time > 0)
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -40,8 +40,7 @@ namespace Havannah.Logic
             while (!currentNode.isLeaf)
             {
                 currentNode = currentNode.GetNextNode();
-                if(currentNode.Parent != null)
-                    _path.Add(currentNode);
+                _path.Add(currentNode);
             }
             return currentNode;
         }
@@ -49,15 +48,18 @@ namespace Havannah.Logic
         {
             Node result = leafNode;
             if (!leafNode.Board.CheckIfWon(_player1) && !leafNode.Board.CheckIfWon(_player2) && !leafNode.Board.CheckIfDraw())
-            {
-                Board childBoard = leafNode.Board.Clone();
-                if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves /*== _player1 ? _player2 : _player1*/, out Point move))
+            {       
+                for (int i = 0; i < howManyChildren; i++)
                 {
-                    Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
-                    childNode.SetMove(move.X, move.Y);
-                    if (!leafNode.Children.Contains(childNode))
-                        leafNode.Children.Add(childNode);
-                    result = childNode;
+                    Board childBoard = leafNode.Board.Clone();
+                    if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves, out Point move))
+                    {
+                        Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
+                        childNode.SetMove(move.X, move.Y);
+                        if (!leafNode.Children.Contains(childNode))
+                            leafNode.Children.Add(childNode);
+                        result = childNode;
+                    }
                 }
             }
             _path.Add(result);
@@ -66,25 +68,27 @@ namespace Havannah.Logic
         private Result Simulation(Node node, double timeLeft)
         {
             Board board = node.Board.Clone();
-            int player = node.WhichPlayerMoves /*== _player1 ? _player2 : _player1*/;
+            int player = node.WhichPlayerMoves;
             while (timeLeft > _minTimeLeft)
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                board.MakeRandomMove(player, out Point move);
-
-                if (board.CheckIfWon(_player1))
+                for (int i = 0; i < Math.Min(board.FreeCells.Count, kParam); i++)
                 {
-                    return Result.Win;
+                    Board tmp = board.Clone();
+                    tmp.MakeMove(player, board.FreeCells[i]);
+                    if (tmp.CheckIfWon(_player1))
+                    {
+                        return Result.Win;
+                    }
+                    if (tmp.CheckIfWon(_player2))
+                    {
+                        return Result.Loss;
+                    }
+                    if (tmp.CheckIfDraw())
+                        return Result.Draw;
                 }
-                else if (board.CheckIfWon(_player2))
-                {
-                    return Result.Loss;
-                }
-                else if (board.CheckIfDraw())
-                {
-                    return Result.Draw;
-                }
+                board.MakeSmartMove(player, out Point move);
                 stopwatch.Stop();
                 timeLeft -= stopwatch.Elapsed.TotalMilliseconds;
                 player = player == _player1 ? _player2 : _player1;
@@ -94,7 +98,7 @@ namespace Havannah.Logic
         }
         private void Backpropagation(Result result)
         {
-            foreach(var node in _path)
+            foreach (var node in _path)
             {
                 node.AddGame(result == Result.Win);
             }
@@ -102,4 +106,3 @@ namespace Havannah.Logic
         }
     }
 }
-

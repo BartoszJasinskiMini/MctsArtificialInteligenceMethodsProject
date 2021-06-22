@@ -63,6 +63,7 @@
     <Compile Include="Logic\Node.cs" />
     <Compile Include="Logic\Point.cs" />
     <Compile Include="Logic\ShapesStructure.cs" />
+    <Compile Include="Logic\SmartPlayouts.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
