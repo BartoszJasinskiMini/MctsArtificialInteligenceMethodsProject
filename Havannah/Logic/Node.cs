@@ -9,7 +9,7 @@ namespace Havannah.Logic
 {
     public class Node
     {
-        
+        private const double _raveConst = 0.8;
         public int Wins { get; private set; }
         public int AllGames { get; private set; }
         public double WinRatio { 
@@ -19,7 +19,8 @@ namespace Havannah.Logic
                 return 0.0;
             }
         }
-        public bool isLeaf { get { return Children.Count < 5; } }
+        public List<Point> NotMadeMoves;
+        public bool isLeaf { get { return NotMadeMoves.Count > 0; } }
         public List<Node> Children { get; private set; }
         public Node Parent { get; private set; }
         public Board Board { get; private set; }
@@ -39,6 +40,8 @@ namespace Havannah.Logic
             Children = new List<Node>();
             Board = board;
             WhichPlayerMoves = player;
+            NotMadeMoves = new List<Point>();
+            board.FreeCells.ForEach(item => NotMadeMoves.Add(item.Clone()));
         }
         public void SetMove(int x, int y)
         {
@@ -78,7 +81,7 @@ namespace Havannah.Logic
                 {
                     raveComp = raveNode.Score;
                 }
-                double value = Children[i].WinRatio + Math.Sqrt(2) * comp + raveComp;
+                double value = Children[i].WinRatio + Math.Sqrt(2) * comp + _raveConst * raveComp;
                 scores[i] = value;
                 if (value >= maxValue)
                 {

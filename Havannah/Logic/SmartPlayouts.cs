@@ -49,17 +49,20 @@ namespace Havannah.Logic
             Node result = leafNode;
             if (!leafNode.Board.CheckIfWon(_player1) && !leafNode.Board.CheckIfWon(_player2) && !leafNode.Board.CheckIfDraw())
             {
-                Board childBoard = leafNode.Board.Clone();
-                if (childBoard.MakeRandomMove(leafNode.WhichPlayerMoves, out Point move))
+                if (leafNode.NotMadeMoves.Count > 0)
                 {
+                    Board childBoard = leafNode.Board.Clone();
+                    Random random = new Random();
+                    Point nextMove = leafNode.NotMadeMoves[random.Next(0, leafNode.NotMadeMoves.Count)];
+                    leafNode.NotMadeMoves.Remove(nextMove);
+                    childBoard.MakeMove(leafNode.WhichPlayerMoves, nextMove);
                     Node childNode = new Node(leafNode, childBoard, leafNode.WhichPlayerMoves == _player1 ? _player2 : _player1);
-                    childNode.SetMove(move.X, move.Y);
-                    if (!leafNode.Children.Contains(childNode))
-                        leafNode.Children.Add(childNode);
+                    childNode.SetMove(nextMove.X, nextMove.Y);
+                    leafNode.Children.Add(childNode);
                     result = childNode;
+                    _path.Add(result);
                 }
             }
-            _path.Add(result);
             return result;
         }
         private Result Simulation(Node node, double timeLeft)
